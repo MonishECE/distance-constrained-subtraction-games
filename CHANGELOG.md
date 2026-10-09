@@ -1,0 +1,33 @@
+# Changelog
+
+## 2026-10-03 --- Repository consolidation
+
+-   Consolidated the Python and C++ research engines, deep-scan outputs,
+    methodology, Overleaf source, certificate data, full-state figure,
+    literature-search terms, and historical run logs.
+-   Added `src/full_state_analysis.py`, an independent Boolean P/N
+    solver and finite-state certificate generator with direct SG
+    cross-checking.
+-   Preserved the (N=500{,}000), (35`\le `{=tex}k`\le120`{=tex}), (m=1)
+    merged deep scan.
+-   Recorded the two main observed affine regimes:
+    -   (42`\le `{=tex}k`\le52`{=tex}): (p=2k+56), residues
+        ({0,54,k+55}).
+    -   (58`\le `{=tex}k`\le78`{=tex}): (p=2k+88), residues
+        ({0,86,k+87}).
+-   Recorded exact finite-state computer-assisted certification of the
+    second regime for each fixed (k=58,`\ldots`{=tex},78).
+-   Corrected the certificate CSV metadata field
+    `finite_prefix_check_through_n` to the stronger verification bound
+    (t+k+p-1). This does not change cycle starts, periods, residue sets,
+    or independent SG cross-check results.
+-   Retained older exploratory reports and compiler/runtime logs for
+    auditability.
+
+## 2026-10-09 — Exact affine-region Python pipeline
+
+- Added `src/affine_region_extractor.py` with Boolean P-state generation, exact line extraction, 8-neighbor components, greedy line cover, exact rational cross-k tracks, cycle and SG verification, and exhaustive mismatch tests.
+- Generated `results/affine/` outputs for every k=58..78 (independent SG cross-checks enabled).
+- Identified 30 exact cross-parameter tracks under the extraction/matching conventions. These are empirically verified line families, not yet a complete symbolic theorem.
+- Track-only classification has zero false positives but nonzero false negatives; the per-k line cover plus explicitly retained residual points exactly reproduces all tested P-states.
+- Added out-of-regime finite-prefix falsification for k=56,57,79,80.

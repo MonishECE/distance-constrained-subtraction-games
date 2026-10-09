@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# C/C++ build outputs
+*.o
+*.obj
+*.exe
+distance_subtraction_research
+
+# LaTeX build products
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
