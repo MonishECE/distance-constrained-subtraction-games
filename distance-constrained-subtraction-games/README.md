@@ -1,3 +1,17 @@
+## October 9, 2026: Formal theorem and proof audit update
+
+The **current research paper** is `paper/main.tex` (undergraduate-style LaTeX), and a compiled PDF is supplied alongside downloadable deliverables. `paper/archive/main_initial_2026-10-04.tex` preserves the original paper. Theorem A1 (row interval structure) and Theorem A2 (eventual periodicity) now have self-contained mathematical proofs. Theorem B (`58 <= k <= 78`, starting residues `{0,86,k+87}` mod `2k+88`) has an exact **computer-assisted finite-parameter certificate**, not a uniform symbolic derivation.
+
+Run the new audit:
+
+```bash
+python src/verify_theorems_ab.py --out data/certificates/theorem_B_audit.csv --summary data/certificates/theorem_B_audit.json
+```
+
+See `paper/PROOF_AUDIT.md`, `paper/WORKS_CITED.md`, and `RESEARCH_UPDATE_CONCLUSION.md`. The old paper had inadequate prefix-bound metadata, corrected in the new audit.
+
+---
+
 # Distance-Constrained Dynamic Subtraction Games
 
 Computational research repository for the game family (D(k,m)).
@@ -182,3 +196,35 @@ the source code.
 Older scan reports and logs are preserved for auditability, including
 the shorter-run (k=80) false-tail episode. The later (N=500{,}000) scan
 corrected that interpretation to candidate preperiod (0), period (947).
+
+## NEW — Exact affine-region extraction (Python)
+
+Run from the repository root:
+
+```bash
+python src/affine_region_extractor.py self-test
+python src/affine_region_extractor.py batch --k-min 58 --k-max 78 --crosscheck-sg --out results/affine
+```
+
+Read `AFFINE_ANALYSIS_GUIDE.md` and `results/affine/ANALYSIS.md`. The extractor identifies and tracks exact lattice-line segments, exports all residual P-state points, cross-checks the finite-state certificates and SG values, validates the tracked formulas and reports counterexamples just outside the proposed regime.
+
+**Status:** exact computational region mining, not a finished symbolic proof. The cross-k tracked lines cover a substantial subset of the P-states, with **zero false positives but nonzero false negatives**. The region set plus residual points reconstructs every tested first-period P-state exactly.
+
+
+## New exact row-interval analysis (October 2026)
+
+```bash
+python src/row_interval_classifier.py self-test
+python src/row_interval_classifier.py batch --k-min 58 --k-max 78 --crosscheck-sg --out results/row_intervals
+```
+
+The row-interval theorem gives an exact reduction for `m=1`: with `A_n` the moves to P-children, all P-states `(n,s)` form either an empty row, all `1 <= s <= k`, or a single interval `[max(A_n)-1, min(A_n)+1]` clipped to `[1,k]`. Non-full nonempty rows have at most three cells. This is a proof from the recurrence, **not** a novel closed form for the sequence of row types.
+
+The program reconstructs all first-period P-cells for `k=58..78` with zero mismatches. Its CSV files contain exact per-row interval data, piecewise affine/parity blocks, and exact cross-parameter block tracks. `results/row_intervals/ANALYSIS.md` states what remains unproved.
+
+## Formal Theorems A/B/C (2026-10-09 update)
+- `paper/main.tex` is the integrated undergraduate research paper.
+- `paper/theorem_A/main.tex`, `paper/theorem_B/main.tex`, `paper/theorem_C/main.tex` compile as separate documented papers, each with citations.
+- `THEOREM_STATUS.md` distinguishes proved, computer-assisted fixed-parameter proofs, and **Working on** conjectures.
+- `src/verify_theorem_c.py` supplies 12 new exact certificates and 8 boundary counterexamples.
+- For the research conclusion and sources, see `RESEARCH_UPDATE_CONCLUSION.md` and `paper/SOURCE_AUDIT.md`.
