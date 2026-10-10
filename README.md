@@ -1,29 +1,49 @@
 # Distance-Constrained Subtraction Games
 
-Clean research snapshot assembled October 10, 2026 from both remote branches and the historical affine ZIP. Import **this folder's contents** at the repository root; do not create another nested repository folder.
+Research on impartial take-away games in which consecutive removals must differ by more than a fixed distance.
 
-## Research status
+**Authors:** Monish Krishna Bandaru, Rithwik Krishna Gummadi, Santosh Krishna Reddy.
 
-- Theorem A: interval row structure and eventual P/N periodicity, proved from the recurrence.
-- Theorem B: 21 fixed parameters k=58..78, exact computer-assisted certificates plus induction; least start period 2k+88.
-- Theorem C: analytic template obstruction and period collapse; 12 fixed parameters k=42..53 with modulus 2k+56. At k=53 the least start period is 54.
-- A uniform symbolic regime classification and infinite hierarchy remain open. No originality claim has been established.
+From a heap of size `n`, a move removes `1 ≤ r ≤ min(k,n)` counters. After a previous removal `s`, it must also satisfy `|r−s| > m`. The first move has no previous-removal restriction. A player with no legal move loses.
 
-## Start here
+## Results
 
-Run `python src/verify_package.py` from this folder (Python 3.10+; certificate checks need no third-party packages). Read `migration/WINDOWS_CMD.md` before replacing a checkout, and review `migration/DELETION_AUDIT.csv`.
-
-| Folder | Purpose |
+| Result | Scope |
 |---|---|
-| paper/ | Integrated and separate A/B/C LaTeX, citations, supplied PDFs |
-| overleaf/ | Single-file integrated and A/B/C sources; upload one .tex as main.tex |
-| src/ | Original Python/C++ engines, recovered affine extractor, rebuilt A/B verifier, C verifier |
-| data/certificates/ | Regenerated exact certificates and boundary failures |
-| data/, reports/, figures/, results/ | Preserved scans, evidence and affine extraction outputs |
-| docs/, literature/, logs/ | Methodology, literature leads and historical logs |
-| archive/ | Original drafts, superseded documents and complete Git history bundle |
-| migration/ | Pinned branch inventory, file audit, safe replacement tool and validation report |
+| Theorem A | Exact interval structure of losing full-state rows and eventual P/N periodicity for fixed `k ≥ 1, m ≥ 0` |
+| Theorem B | For `m=1, k=58..78`, losing starting heaps satisfy `n mod (2k+88) ∈ {0,86,k+87}` |
+| Theorem C | Template obstruction and period-collapse results; for `m=1, k=42..53`, losing starts satisfy `n mod (2k+56) ∈ {0,54,k+55}` |
 
-The A/B verifier is newly reconstructed for this consolidation, not recovered original code. The row-interval classifier and its outputs were never present in accessible Git history; no replacement is passed off as the original. See `migration/PROVENANCE.md`.
+The B/C parameter ranges are proved by exact finite certificates and induction. At `k=53`, the least starting period is `54`, although the displayed modulus is `162`. A uniform symbolic explanation of the regimes and a general parameter hierarchy remain open. A comprehensive originality review is also open.
 
-Optional plots: `python -m pip install -r requirements.txt`. C++: compile with C++17 and run its `self-test`. PDFs are preserved upstream binaries; current compilation status is recorded in the validation report.
+## Read the paper
+
+- [Integrated manuscript](paper/main.tex)
+- [Theorem A](paper/theorem_A/main.tex), [Theorem B](paper/theorem_B/main.tex), [Theorem C](paper/theorem_C/main.tex)
+- [Single-file Overleaf manuscript](overleaf/main.tex)
+- [References](paper/references.bib)
+
+Upload `overleaf/main.tex` to a blank Overleaf project and use pdfLaTeX. The separate `overleaf/theorem_*.tex` files are also self-contained.
+
+## Verify the results
+
+Python 3.10+; no external packages are needed for theorem verification:
+
+```console
+python src/verify_package.py
+```
+
+This runs the solver self-tests, verifies both certificate families and boundary counterexamples, and checks the manuscript tables. See [reproducibility instructions](REPRODUCIBILITY.md) for individual commands and C++/LaTeX builds.
+
+## Repository contents
+
+| Directory | Contents |
+|---|---|
+| `paper/`, `overleaf/` | Manuscripts and bibliography |
+| `src/` | Python and C++ solvers, theorem verifiers, affine extractor |
+| `data/certificates/` | Exact certificate tables and boundary counterexamples |
+| `data/` | Supporting scan datasets |
+| `results/affine/` | Exact affine extraction outputs and limitations |
+| `figures/` | Representative full-state plot |
+
+Exploratory scan patterns and affine catalogs are computational evidence; they do not establish a uniform symbolic theorem. The theorem verifiers use finite repeated-state windows with an explicitly checked starting-position bridge.

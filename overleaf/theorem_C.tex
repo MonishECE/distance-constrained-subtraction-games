@@ -1,4 +1,3 @@
-% Generated from paper/theorem_C/main.tex; regenerate if the canonical source changes.
 \documentclass[11pt]{article}
 \usepackage[margin=0.93in]{geometry}
 \usepackage[T1]{fontenc}
@@ -20,14 +19,14 @@
 \newcommand{\Nset}{\mathcal{N}}
 \newcommand{\statusproved}{\textbf{Proof status: Proved.}}
 \newcommand{\statusmachine}{\textbf{Proof status: Proved by exact finite certificates plus induction (computer-assisted).}}
-\newcommand{\statusopen}{\textbf{Proof status: Working on (not yet proved).}}
+\newcommand{\statusopen}{\textbf{Proof status: Open (not yet proved).}}
 
 \title{\textbf{Distance-Constrained Dynamic Subtraction Games}\\[0.4em]Theorem C: Template Boundaries and Open Parameter Hierarchy}
-\author{Research Team -- draft for independent mathematical review}
+\author{Monish Krishna Bandaru, Rithwik Krishna Gummadi, Santosh Krishna Reddy}
 \date{October 9, 2026}
 \begin{document}
 \maketitle
-\begin{abstract}Partial results proved; general hierarchy Working on. This standalone paper gives definitions, proof logic, precise evidence boundaries, and cited sources in the same document.\end{abstract}
+\begin{abstract}Partial results proved; general hierarchy Open. This standalone paper gives definitions, proof logic, precise evidence boundaries, and cited sources in the same document.\end{abstract}
 \tableofcontents
 \section{Theorem A: complete structural results}\label{sec:A}
 \statusproved
@@ -118,10 +117,10 @@ To establish minimality, set $R=\{0,86,k+87\}$ in the cyclic group of order $p$.
 77 & 242 & 0 & 318 & PASS \\
 78 & 244 & 0 & 321 & PASS \\
 \bottomrule\end{longtable}
-\paragraph{Unresolved extension (Working on).} The 21 instances constitute a completed computer-assisted proof, not a uniform symbolic derivation for arbitrary $k$. Explicit P-row formulas explaining the numbers 86 and 88 and the boundary at $k=78$ remain \emph{Working on}. See Theorem C.
+\paragraph{Unresolved extension (Open).} The 21 instances constitute a completed computer-assisted proof, not a uniform symbolic derivation for arbitrary $k$. Explicit P-row formulas explaining the numbers 86 and 88 and the boundary at $k=78$ remain \emph{Open}. See Theorem C.
 
 \section{Theorem C: regime arithmetic, boundary obstructions, and a second certificate family}\label{sec:C}
-\textbf{Full proposed parameter-hierarchy theorem status: Working on (not proved).}
+\textbf{Full proposed parameter-hierarchy theorem status: Open (not proved).}
 
 We investigate the empirical starting-position template
 \begin{equation}\label{eq:template}
@@ -193,8 +192,8 @@ A template that agrees with early rows need not repeat indefinitely. The exact r
 \bottomrule\end{longtable}
 \paragraph{Interpretation.} The $k=54,\ldots,57$ failures of $A=54$ at $n=54$ follow already from Proposition~\ref{prop:Cupper}. The $k=79$, $A=86$ failure at $n=492$ is particularly instructive: several earlier blocks of starting outcomes happen to agree with the proposed formula, but its recurrence ultimately disagrees. One must not infer a theorem from a long numerical scan or a finite streak of residue matches.
 
-\subsection{What remains Working on}
-\begin{conjecture}[Parameterized regime mechanism---Working on]\label{conj:Chierarchy}
+\subsection{What remains Open}
+\begin{conjecture}[Parameterized regime mechanism---Open]\label{conj:Chierarchy}
 There may exist a structured set of constants $A$ and corresponding $k$-intervals for which $\mathcal{T}(k,A)$ is valid, with $A=54$ and $A=86$ representing two examples. An eventual symbolic classification may explain those constants, the actual parameter endpoints, and the complete P-state row intervals.
 \end{conjecture}
 \statusopen\quad No assertion that an infinite hierarchy exists is proved. The finite certificates do not yield a parameter-uniform inductive formula for all rows. In particular we \emph{have not} derived the numbers $54$ and $86$ from first principles, shown why the $A=86$ regime terminates at $k=78$, or ruled out isolated additional ranges of $k$ with some other $A$.
@@ -202,21 +201,21 @@ There may exist a structured set of constants $A$ and corresponding $k$-interval
 \subsection{Next verifiable proof obligations}
 The next step is to derive a finite, symbolic, piecewise affine formula for $Q_n$ uniformly in $k$ on a regime, prove each branch stable under the exact set recurrence, and justify the allowed parameter inequalities. A certificate-assisted theorem for finitely many $k$ values must be distinguished from such a uniform proof.\par
 
-\section*{Works cited and source verification}
-\addcontentsline{toc}{section}{Works cited and source verification}
+\section*{References}
+\addcontentsline{toc}{section}{References}
 \begin{thebibliography}{9}
 \bibitem{sprague1935}
 R. Sprague, ``\"Uber mathematische Kampfspiele,'' \emph{T\^ohoku Mathematical Journal}, first series, vol.~41 (1935), pp.~438--444.\newline
-Original journal record: \url{https://www.jstage.jst.go.jp/article/tmj1911/41/0/41_0_438/_article}. The metadata and page span were checked against the journal listing.
+Journal: \url{https://www.jstage.jst.go.jp/article/tmj1911/41/0/41_0_438/_article}.
 \bibitem{grundy1939}
 P.~M. Grundy, ``Mathematics and Games,'' \emph{Eureka}, no.~2 (1939), pp.~6--8.\newline
-Bibliographical entry and link to scanned source at \url{https://oeis.org/A002188/a002188.pdf}; the bibliographical description is corroborated by OEIS. The scan was not used for any copied proof.
+Scan: \url{https://oeis.org/A002188/a002188.pdf}.
 \bibitem{winningways2001}
 E.~R. Berlekamp, J.~H. Conway, and R.~K. Guy, \emph{Winning Ways for Your Mathematical Plays}, vol.~1, second ed., A~K Peters, 2001.\newline
-Publisher record: \url{https://www.routledge.com/Winning-Ways-for-Your-Mathematical-Plays-Volume-1-2nd-Edition/Berlekamp-Conway-Guy/p/book/9781568811307}; verified against publisher and author's publication listings.
+Publisher: \url{https://www.routledge.com/Winning-Ways-for-Your-Mathematical-Plays-Volume-1-2nd-Edition/Berlekamp-Conway-Guy/p/book/9781568811307}.
 \bibitem{gurvich2012}
 V.~Gurvich, ``On Repetition-free Subtraction Games and Vile-dopey Integers,'' RUTCOR Research Report RRR-01-2012, Rutgers University, January 2012.\newline
-Author's publication list: \url{https://rutcor.rutgers.edu/~gurvich/publist.pdf} (entry 240). A report transcription was located, but its detailed theorems were \emph{not} invoked here.
+Author bibliography: \url{https://rutcor.rutgers.edu/~gurvich/publist.pdf}.
 \end{thebibliography}
 \textit{Source-use boundary.} The P/N and Sprague--Grundy methods are standard background and are credited above. All specific interval, finite-window, template-obstruction and finite-range arguments in these documents are written self-contained from the game definition, not borrowed from an external proof. Originality relative to \emph{all} prior literature has not been established; a thorough review remains necessary.
 

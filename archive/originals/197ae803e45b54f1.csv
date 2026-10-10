@@ -1,9 +1,0 @@
-k,A,candidate_period,first_counterexample_n,predicted_P,actual_P,naive_crosscheck,status
-41,54,138,42,False,True,PASS,PROVED: proposed template fails at this k
-54,54,164,54,True,False,PASS,PROVED: proposed template fails at this k
-55,54,166,54,True,False,PASS,PROVED: proposed template fails at this k
-56,54,168,54,True,False,PASS,PROVED: proposed template fails at this k
-57,54,170,54,True,False,PASS,PROVED: proposed template fails at this k
-57,86,202,58,False,True,PASS,PROVED: proposed template fails at this k
-79,86,246,492,True,False,PASS,PROVED: proposed template fails at this k
-80,86,248,167,True,False,PASS,PROVED: proposed template fails at this k

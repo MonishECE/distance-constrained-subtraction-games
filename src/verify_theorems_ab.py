@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reconstructed 2026-10-10 from Theorem A/B text; not the missing original.
+"""Exact interval-recurrence verification for Theorems A and B.
 
 Rows are integer bitsets; bit s-1 means (n,s) is P. Exact integer arithmetic.
 """
@@ -88,7 +88,7 @@ def main():
         w=csv.DictWriter(f,fieldnames=list(records[0]));w.writeheader();w.writerows(records)
     summary=dict(all_passed=True,small_parameter_crosschecks=small,
                  theorem_B_fixed_k_certificates=len(records),parameters=[58,78],
-                 reconstructed_verifier=True,uniform_symbolic_proof=False,
+                 uniform_symbolic_proof=False,
                  certificate_csv_sha256=hashlib.sha256(args.out.read_bytes()).hexdigest())
     args.summary.parent.mkdir(parents=True,exist_ok=True)
     args.summary.write_text(json.dumps(summary,indent=2)+'\n',encoding='utf-8')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify integrity and research in a temporary copy without changing the package."""
+"""Verify research evidence in a temporary copy without changing published files."""
 import csv
 import hashlib
 import json
@@ -14,18 +14,6 @@ import tempfile
 def main():
     assert __debug__, 'Run without -O'
     root=Path(__file__).resolve().parents[1]
-    manifest=root/'MANIFEST_SHA256.txt'
-    expected={}
-    for line in manifest.read_text().splitlines():
-        digest,path=line.split('  ',1); expected[path]=digest
-        assert hashlib.sha256((root/path).read_bytes()).hexdigest()==digest, ('hash mismatch',path)
-    actual={p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()
-            and '__pycache__' not in p.parts and '.git' not in p.relative_to(root).parts
-            and p.relative_to(root).as_posix()!='MANIFEST_SHA256.txt'}
-    assert actual==set(expected), ('unlisted/missing files',actual.symmetric_difference(expected))
-    audit=list(csv.DictReader((root/'migration/DELETION_AUDIT.csv').open(encoding='utf-8')))
-    for row in audit:
-        assert hashlib.sha256((root/row['preserved_at']).read_bytes()).hexdigest()==row['sha256'], row
     for p in (root/'overleaf').glob('*.tex'):
         assert not re.search(r'\\(?:input|include|includegraphics|bibliography)\{',p.read_text()), p
     with tempfile.TemporaryDirectory() as td:
@@ -63,7 +51,7 @@ def main():
         for row in failures:
             numbers=[row['k'],row['A'],row['first_counterexample_n']]
             assert re.search(r'\s*&\s*'.join(numbers),tex), ('boundary table',row)
-    print(f'PASS: manifest ({len(expected)} files), all {len(audit)} source mappings, standalone structure, reproduced evidence and paper tables')
+    print('PASS: solver self-tests, standalone structure, reproduced certificates and paper tables')
 
 
 if __name__=='__main__': main()
