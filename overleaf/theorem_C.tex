@@ -1,0 +1,223 @@
+% Generated from paper/theorem_C/main.tex; regenerate if the canonical source changes.
+\documentclass[11pt]{article}
+\usepackage[margin=0.93in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage{xcolor,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\allowdisplaybreaks
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newcommand{\Pset}{\mathcal{P}}
+\newcommand{\Nset}{\mathcal{N}}
+\newcommand{\statusproved}{\textbf{Proof status: Proved.}}
+\newcommand{\statusmachine}{\textbf{Proof status: Proved by exact finite certificates plus induction (computer-assisted).}}
+\newcommand{\statusopen}{\textbf{Proof status: Working on (not yet proved).}}
+
+\title{\textbf{Distance-Constrained Dynamic Subtraction Games}\\[0.4em]Theorem C: Template Boundaries and Open Parameter Hierarchy}
+\author{Research Team -- draft for independent mathematical review}
+\date{October 9, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}Partial results proved; general hierarchy Working on. This standalone paper gives definitions, proof logic, precise evidence boundaries, and cited sources in the same document.\end{abstract}
+\tableofcontents
+\section{Theorem A: complete structural results}\label{sec:A}
+\statusproved
+\subsection{Rules, notation and outcome recurrence}
+Fix $k\ge1$, $m\ge0$ and a heap of $n\ge0$ counters. From a state $(n,s)$, where $s\in\{1,\ldots,k\}$ is the preceding removal, a legal move removes $r$ counters such that $1\le r\le\min(k,n)$ and $|r-s|>m$. The resulting state is $(n-r,r)$. With no previous removal, the first move has only the first restriction. Normal play applies: a player with no legal move loses. We call losing and winning states respectively $\Pset$- and $\Nset$-positions, following standard combinatorial-game terminology \cite{sprague1935,grundy1939,winningways2001}.
+
+Define the P-state row and its potential P-reaching removals by
+\begin{align}
+Q_n&=\{s\in\{1,\ldots,k\}:(n,s)\text{ is }\Pset\},\\
+A_n&=\{r:1\le r\le\min(k,n),\ r\in Q_{n-r}\}.
+\end{align}
+In particular $Q_0=\{1,\ldots,k\}$, since there is no legal removal. Starting position $n$ (no previous move) is a $\Pset$-position precisely when $A_n=\varnothing$.
+
+\begin{theorem}[Exact interval theorem]\label{thm:Ainterval}
+For every $n\ge0$, the set $Q_n$ is empty, full, or one interval of consecutive integers. More exactly, if $A_n=\varnothing$, then $Q_n=\{1,\ldots,k\}$. Otherwise
+\[
+\boxed{Q_n=\bigl[\max\{1,\max A_n-m\},\ \min\{k,\min A_n+m\}\bigr]\cap\mathbb Z.}
+\]
+An interval whose lower endpoint exceeds its upper endpoint is empty. Any non-full row has at most $2m+1$ entries.
+\end{theorem}
+\begin{proof}
+The legal move $r$ takes $(n,s)$ to a losing state exactly when $r\in A_n$ and $|r-s|>m$. Hence $(n,s)$ is losing precisely when \emph{every} move in $A_n$ fails its previous-removal constraint. Equivalently, $|r-s|\le m$ for every $r\in A_n$. If $A_n$ is empty, this holds for all $1\le s\le k$. Otherwise the inequalities $r-m\le s\le r+m$ for all $r\in A_n$ intersect to $\max A_n-m\le s\le\min A_n+m$, clipped to $1\le s\le k$. Its length is at most $2m+1$.
+\end{proof}
+
+\begin{lemma}[Finite-memory recurrence]\label{lem:memory}
+For fixed $k,m$, $Q_n$ is computed deterministically from $Q_{n-1},\ldots,Q_{n-k}$ whenever $n\ge k$.
+\end{lemma}
+\begin{proof}The membership test $r\in Q_{n-r}$ determines $A_n$ for each $1\le r\le k$; then Theorem~\ref{thm:Ainterval} determines $Q_n$.\end{proof}
+
+\begin{theorem}[Eventual P/N periodicity]\label{thm:Aperiod}
+For every fixed $k\ge1$ and $m\ge0$, the sequence $(Q_n)_{n\ge0}$ is eventually periodic, and so is the unrestricted starting-position P/N sequence.
+\end{theorem}
+\begin{proof}
+Each $Q_n$ is a subset of $\{1,\ldots,k\}$, so there are at most $2^k$ row values. Consider consecutive ordered windows $(Q_n,\ldots,Q_{n+k-1})$. At most $2^{k^2}$ such windows exist. Theorem~\ref{lem:memory} makes the successor window a deterministic function of its predecessor once the recurrence has entered the full $k$-move range. Some two windows recur by pigeonhole, and all later windows agree by induction. Thus the rows are ultimately periodic. The starting $\Pset$ predicate $A_n=\varnothing$ depends on the preceding $k$ rows for $n\ge k$, so it inherits eventual periodicity.
+\end{proof}
+\begin{corollary}[Specialization $m=1$] Every non-full $Q_n$ has at most three consecutive elements.\end{corollary}
+\paragraph{Scope.} Eventual periodicity is not a statement about a least period or an affine formula in $k$. Those stronger claims require separate work.
+
+\section{Theorem B: a 21-parameter certified affine regime}\label{sec:B}
+\statusmachine
+\subsection{Certification lemmas}
+\begin{lemma}[Window repetition]\label{lem:Bwindow}
+Fix $k,m$. Suppose for integers $p\ge1,t\ge0$,
+$Q_{t+i}=Q_{t+p+i}$ for every $0\le i<k$. Then $Q_n=Q_{n+p}$ for all $n\ge t$.
+\end{lemma}
+\begin{proof}
+The given $k$ equalities form the induction base. For $n\ge t+k$, each row used in the calculation of $A_n$ is $Q_{n-r}$ for $1\le r\le k$, and the corresponding row for $A_{n+p}$ is $Q_{n+p-r}$. These rows agree by induction; therefore their potential-removal sets and the resulting $Q$ rows agree by the exact recurrence in Theorem~\ref{thm:Ainterval}. Since $n\ge t+k\ge k$, both states allow all removal sizes through $k$.
+\end{proof}
+\begin{lemma}[Starting-position bridge]\label{lem:Bbridge}
+Under Lemma~\ref{lem:Bwindow}, the starting-position P/N sequence has period $p$ for all $n\ge t+k$. A proposed $p$-periodic formula is valid for every $n\ge0$ if it matches the exact starting P/N outcome for $0\le n\le t+k+p-1$.
+\end{lemma}
+\begin{proof}For $n\ge t+k$, each child row $Q_{n-r}$ agrees with $Q_{n+p-r}$, and all removals $1\le r\le k$ are available. Thus $A_n=A_{n+p}$, so the starting outcomes agree. The finite bound includes the entire earlier prefix and one complete period beyond $t+k$; any subsequent index reduces to that verified range.\end{proof}
+\begin{theorem}[Exact certified $A=86$ regime]\label{thm:B}
+For each integer $58\le k\le78$, the unrestricted starting position of $D(k,1)$ with $n$ counters is losing precisely when
+\[\boxed{n\bmod(2k+88)\in\{0,86,k+87\}.}\]
+The least positive period of this starting P/N sequence is $2k+88$.
+\end{theorem}
+\begin{proof}[Finite computation and mathematical induction]
+Fix one of the 21 values $k=58,\ldots,78$. The script \texttt{src/verify\_theorems\_ab.py} computes each $Q_n$ by the integer recurrence of Theorem~\ref{thm:Ainterval}. With $p=2k+88$, it finds the exact $t$ shown in Table~\ref{tab:Bcert} and asserts the $k$ row equalities in Lemma~\ref{lem:Bwindow}. It also verifies the proposed start predicate for every $0\le n\le t+k+p-1$. Lemmas~\ref{lem:Bwindow} and~\ref{lem:Bbridge} therefore prove the infinite-$n$ claim for this fixed $k$. The script repeats these finite checks for each of the 21 listed integers. It additionally compares the rows and unrestricted starts with an independent direct Sprague--Grundy implementation over the verified range.
+
+To establish minimality, set $R=\{0,86,k+87\}$ in the cyclic group of order $p$. If a nonzero shift fixes a set of three elements, its translation orbits must each have length three, so $R=\{0,p/3,2p/3\}$. Its smaller nonzero element would therefore be $p/3$. Yet $p/3=(2k+88)/3<86$ for $58\le k\le78$, contradicting $\min(R\setminus\{0\})=86$. Thus the period is least.
+\end{proof}
+\subsection{Exact reproduced certificates}
+\begin{longtable}{rrrrl}
+\caption{Theorem B, corrected finite-window certificates. The bridge endpoint is inclusive.}\label{tab:Bcert}\\
+\toprule $k$ & $p$ & $t$ & bridge end & independent SG \\
+\midrule\endfirsthead\toprule $k$ & $p$ & $t$ & bridge end & independent SG \\
+\midrule\endhead
+58 & 204 & 58 & 319 & PASS \\
+59 & 206 & 59 & 323 & PASS \\
+60 & 208 & 59 & 326 & PASS \\
+61 & 210 & 59 & 329 & PASS \\
+62 & 212 & 59 & 332 & PASS \\
+63 & 214 & 58 & 334 & PASS \\
+64 & 216 & 59 & 338 & PASS \\
+65 & 218 & 0 & 282 & PASS \\
+66 & 220 & 0 & 285 & PASS \\
+67 & 222 & 0 & 288 & PASS \\
+68 & 224 & 0 & 291 & PASS \\
+69 & 226 & 0 & 294 & PASS \\
+70 & 228 & 0 & 297 & PASS \\
+71 & 230 & 0 & 300 & PASS \\
+72 & 232 & 0 & 303 & PASS \\
+73 & 234 & 0 & 306 & PASS \\
+74 & 236 & 0 & 309 & PASS \\
+75 & 238 & 0 & 312 & PASS \\
+76 & 240 & 0 & 315 & PASS \\
+77 & 242 & 0 & 318 & PASS \\
+78 & 244 & 0 & 321 & PASS \\
+\bottomrule\end{longtable}
+\paragraph{Unresolved extension (Working on).} The 21 instances constitute a completed computer-assisted proof, not a uniform symbolic derivation for arbitrary $k$. Explicit P-row formulas explaining the numbers 86 and 88 and the boundary at $k=78$ remain \emph{Working on}. See Theorem C.
+
+\section{Theorem C: regime arithmetic, boundary obstructions, and a second certificate family}\label{sec:C}
+\textbf{Full proposed parameter-hierarchy theorem status: Working on (not proved).}
+
+We investigate the empirical starting-position template
+\begin{equation}\label{eq:template}
+\mathcal{T}(k,A):\qquad P_0(n)\iff n\bmod p\in R,\qquad
+p=2k+A+2,\quad R=\{0,A,k+A+1\},
+\end{equation}
+where $k,A$ are positive integers and $P_0(n)$ means that the unrestricted start with $n$ counters is losing. These observations concern this game's specific recurrence, not a claim previously established in the cited literature. The background on subtraction games and no-repetition variants motivates the question \cite{winningways2001,gurvich2012}.
+
+\subsection{Uniform analytic results: proved}
+\begin{proposition}[Immediate upper bound on any valid template]\label{prop:Cupper}
+If $\mathcal{T}(k,A)$ holds for $D(k,1)$, then necessarily $k<A$.
+\end{proposition}
+\begin{proof}
+Equation~\eqref{eq:template} declares $n=A$ a losing unrestricted start, since $A\in R$. If $k\ge A$, however, removing exactly $A$ counters is a legal \emph{first} move from $n=A$ and leaves an empty heap, where the next player has no legal move. Therefore the first player wins from $n=A$, a contradiction.
+\end{proof}
+
+\begin{proposition}[Arithmetic collapse of the three-residue template]\label{prop:Ccollapse}
+Let $p=2k+A+2$ and $R=\{0,A,k+A+1\}\pmod p$ with $k,A\ge1$. The binary $p$-periodic indicator of $R$ has a smaller positive period if and only if $k=A-1$. In that case $p=3A$, $R=\{0,A,2A\}$, and the least positive period is $A$.
+\end{proposition}
+\begin{proof}
+The residues satisfy $0<A<k+A+1<p$, so there are exactly three. If the indicator has a smaller period, a nonzero translation of the cyclic group $\mathbb Z/p\mathbb Z$ preserves $R$. Every orbit of a fixed translation has equal size, which must divide $|R|=3$. Since a nonzero translation has no fixed point, its orbit size must equal three. The invariant set is therefore the orbit $\{0,p/3,2p/3\}$. The smaller positive residue is $A$, so $A=p/3$, equivalently $3A=2k+A+2$, or $k=A-1$. Conversely, if $k=A-1$, then $p=3A$ and $R=\{0,A,2A\}$; membership depends only on divisibility by $A$, and $A$ is clearly least because only residue zero is selected modulo $A$.
+\end{proof}
+
+For $A=54$ the upper bound allows only $k\le53$, and the endpoint $k=53$ forces an arithmetic period collapse. Both statements are unconditional \emph{implications}; they do not by themselves establish that the template is realized by a game for any particular $k$.
+
+\subsection{Certified second affine family: proved with finite computation}
+\begin{theorem}[Second fixed-parameter affine regime]\label{thm:Cfinite}
+For every fixed integer $42\le k\le53$, the unrestricted starting position in $D(k,1)$ is losing exactly when
+\[\boxed{n\bmod(2k+56)\in\{0,54,k+55\}.}\]
+For $42\le k\le52$ the least positive starting period is $2k+56$. For $k=53$ the least positive starting period is $54$.
+\end{theorem}
+\begin{proof}[Exact finite certificates and induction]
+For each of the twelve integers, the independent \texttt{src/verify\_theorem\_c.py} invokes the exact Theorem-A interval recurrence, seeks a repeated window of $k$ P-state rows with displacement $p=2k+56$, and checks the formula through $t+k+p-1$. The $t$ and bridge endpoints are printed in Table~\ref{tab:Ccert}. Theorem-B Lemmas~\ref{lem:Bwindow} and~\ref{lem:Bbridge} (reproved by identical elementary induction if this theorem is read independently) extend those finite observations to every $n$. Each row and starting-position outcome through the bridge is checked against a separate direct Sprague--Grundy solver. Thus the computation supplies explicit verifiable finite premises, while mathematical induction supplies the infinite consequence. Proposition~\ref{prop:Ccollapse} establishes the claimed least positive periods; the only collapse in the listed interval occurs at $k=53=A-1$.
+\end{proof}
+\subsection{Exact fixed-parameter certificate table}
+\begin{longtable}{rrrrrl}
+\caption{Theorem C fixed-parameter certificates for $A=54$.}\label{tab:Ccert}\\
+\toprule $k$ & candidate $p$ & least & $t$ & bridge end & SG \\
+\midrule\endfirsthead\toprule $k$ & candidate $p$ & least & $t$ & bridge end & SG \\
+\midrule\endhead
+42 & 140 & 140 & 111 & 292 & PASS \\
+43 & 142 & 142 & 117 & 301 & PASS \\
+44 & 144 & 144 & 117 & 304 & PASS \\
+45 & 146 & 146 & 115 & 305 & PASS \\
+46 & 148 & 148 & 116 & 309 & PASS \\
+47 & 150 & 150 & 112 & 308 & PASS \\
+48 & 152 & 152 & 114 & 313 & PASS \\
+49 & 154 & 154 & 0 & 202 & PASS \\
+50 & 156 & 156 & 0 & 205 & PASS \\
+51 & 158 & 158 & 0 & 208 & PASS \\
+52 & 160 & 160 & 0 & 211 & PASS \\
+53 & 162 & 54 & 0 & 214 & PASS \\
+\bottomrule\end{longtable}
+\subsection{Nearby-parameter counterexamples: proved finite failures}
+A template that agrees with early rows need not repeat indefinitely. The exact recurrence and an independent direct P/N solver give the following first disagreement with the indicated $A$-template. Here ``predicted'' and ``actual'' refer to whether the unrestricted start is a P-position.
+\begin{longtable}{rrrrrl}
+\caption{Counterexamples to extending the fixed-$A$ formulas.}\label{tab:Cfail}\\
+\toprule $k$ & $A$ & first $n$ & predicted P? & actual P? & direct P/N \\
+\midrule\endfirsthead\toprule $k$ & $A$ & first $n$ & predicted P? & actual P? & direct P/N \\
+\midrule\endhead
+41 & 54 & 42 & no & yes & PASS \\
+54 & 54 & 54 & yes & no & PASS \\
+55 & 54 & 54 & yes & no & PASS \\
+56 & 54 & 54 & yes & no & PASS \\
+57 & 54 & 54 & yes & no & PASS \\
+57 & 86 & 58 & no & yes & PASS \\
+79 & 86 & 492 & yes & no & PASS \\
+80 & 86 & 167 & yes & no & PASS \\
+\bottomrule\end{longtable}
+\paragraph{Interpretation.} The $k=54,\ldots,57$ failures of $A=54$ at $n=54$ follow already from Proposition~\ref{prop:Cupper}. The $k=79$, $A=86$ failure at $n=492$ is particularly instructive: several earlier blocks of starting outcomes happen to agree with the proposed formula, but its recurrence ultimately disagrees. One must not infer a theorem from a long numerical scan or a finite streak of residue matches.
+
+\subsection{What remains Working on}
+\begin{conjecture}[Parameterized regime mechanism---Working on]\label{conj:Chierarchy}
+There may exist a structured set of constants $A$ and corresponding $k$-intervals for which $\mathcal{T}(k,A)$ is valid, with $A=54$ and $A=86$ representing two examples. An eventual symbolic classification may explain those constants, the actual parameter endpoints, and the complete P-state row intervals.
+\end{conjecture}
+\statusopen\quad No assertion that an infinite hierarchy exists is proved. The finite certificates do not yield a parameter-uniform inductive formula for all rows. In particular we \emph{have not} derived the numbers $54$ and $86$ from first principles, shown why the $A=86$ regime terminates at $k=78$, or ruled out isolated additional ranges of $k$ with some other $A$.
+
+\subsection{Next verifiable proof obligations}
+The next step is to derive a finite, symbolic, piecewise affine formula for $Q_n$ uniformly in $k$ on a regime, prove each branch stable under the exact set recurrence, and justify the allowed parameter inequalities. A certificate-assisted theorem for finitely many $k$ values must be distinguished from such a uniform proof.\par
+
+\section*{Works cited and source verification}
+\addcontentsline{toc}{section}{Works cited and source verification}
+\begin{thebibliography}{9}
+\bibitem{sprague1935}
+R. Sprague, ``\"Uber mathematische Kampfspiele,'' \emph{T\^ohoku Mathematical Journal}, first series, vol.~41 (1935), pp.~438--444.\newline
+Original journal record: \url{https://www.jstage.jst.go.jp/article/tmj1911/41/0/41_0_438/_article}. The metadata and page span were checked against the journal listing.
+\bibitem{grundy1939}
+P.~M. Grundy, ``Mathematics and Games,'' \emph{Eureka}, no.~2 (1939), pp.~6--8.\newline
+Bibliographical entry and link to scanned source at \url{https://oeis.org/A002188/a002188.pdf}; the bibliographical description is corroborated by OEIS. The scan was not used for any copied proof.
+\bibitem{winningways2001}
+E.~R. Berlekamp, J.~H. Conway, and R.~K. Guy, \emph{Winning Ways for Your Mathematical Plays}, vol.~1, second ed., A~K Peters, 2001.\newline
+Publisher record: \url{https://www.routledge.com/Winning-Ways-for-Your-Mathematical-Plays-Volume-1-2nd-Edition/Berlekamp-Conway-Guy/p/book/9781568811307}; verified against publisher and author's publication listings.
+\bibitem{gurvich2012}
+V.~Gurvich, ``On Repetition-free Subtraction Games and Vile-dopey Integers,'' RUTCOR Research Report RRR-01-2012, Rutgers University, January 2012.\newline
+Author's publication list: \url{https://rutcor.rutgers.edu/~gurvich/publist.pdf} (entry 240). A report transcription was located, but its detailed theorems were \emph{not} invoked here.
+\end{thebibliography}
+\textit{Source-use boundary.} The P/N and Sprague--Grundy methods are standard background and are credited above. All specific interval, finite-window, template-obstruction and finite-range arguments in these documents are written self-contained from the game definition, not borrowed from an external proof. Originality relative to \emph{all} prior literature has not been established; a thorough review remains necessary.
+
+\end{document}

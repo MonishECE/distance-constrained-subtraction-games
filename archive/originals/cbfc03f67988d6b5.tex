@@ -1,0 +1,36 @@
+\section{Theorem A: complete structural results}\label{sec:A}
+\statusproved
+\subsection{Rules, notation and outcome recurrence}
+Fix $k\ge1$, $m\ge0$ and a heap of $n\ge0$ counters. From a state $(n,s)$, where $s\in\{1,\ldots,k\}$ is the preceding removal, a legal move removes $r$ counters such that $1\le r\le\min(k,n)$ and $|r-s|>m$. The resulting state is $(n-r,r)$. With no previous removal, the first move has only the first restriction. Normal play applies: a player with no legal move loses. We call losing and winning states respectively $\Pset$- and $\Nset$-positions, following standard combinatorial-game terminology \cite{sprague1935,grundy1939,winningways2001}.
+
+Define the P-state row and its potential P-reaching removals by
+\begin{align}
+Q_n&=\{s\in\{1,\ldots,k\}:(n,s)\text{ is }\Pset\},\\
+A_n&=\{r:1\le r\le\min(k,n),\ r\in Q_{n-r}\}.
+\end{align}
+In particular $Q_0=\{1,\ldots,k\}$, since there is no legal removal. Starting position $n$ (no previous move) is a $\Pset$-position precisely when $A_n=\varnothing$.
+
+\begin{theorem}[Exact interval theorem]\label{thm:Ainterval}
+For every $n\ge0$, the set $Q_n$ is empty, full, or one interval of consecutive integers. More exactly, if $A_n=\varnothing$, then $Q_n=\{1,\ldots,k\}$. Otherwise
+\[
+\boxed{Q_n=\bigl[\max\{1,\max A_n-m\},\ \min\{k,\min A_n+m\}\bigr]\cap\mathbb Z.}
+\]
+An interval whose lower endpoint exceeds its upper endpoint is empty. Any non-full row has at most $2m+1$ entries.
+\end{theorem}
+\begin{proof}
+The legal move $r$ takes $(n,s)$ to a losing state exactly when $r\in A_n$ and $|r-s|>m$. Hence $(n,s)$ is losing precisely when \emph{every} move in $A_n$ fails its previous-removal constraint. Equivalently, $|r-s|\le m$ for every $r\in A_n$. If $A_n$ is empty, this holds for all $1\le s\le k$. Otherwise the inequalities $r-m\le s\le r+m$ for all $r\in A_n$ intersect to $\max A_n-m\le s\le\min A_n+m$, clipped to $1\le s\le k$. Its length is at most $2m+1$.
+\end{proof}
+
+\begin{lemma}[Finite-memory recurrence]\label{lem:memory}
+For fixed $k,m$, $Q_n$ is computed deterministically from $Q_{n-1},\ldots,Q_{n-k}$ whenever $n\ge k$.
+\end{lemma}
+\begin{proof}The membership test $r\in Q_{n-r}$ determines $A_n$ for each $1\le r\le k$; then Theorem~\ref{thm:Ainterval} determines $Q_n$.\end{proof}
+
+\begin{theorem}[Eventual P/N periodicity]\label{thm:Aperiod}
+For every fixed $k\ge1$ and $m\ge0$, the sequence $(Q_n)_{n\ge0}$ is eventually periodic, and so is the unrestricted starting-position P/N sequence.
+\end{theorem}
+\begin{proof}
+Each $Q_n$ is a subset of $\{1,\ldots,k\}$, so there are at most $2^k$ row values. Consider consecutive ordered windows $(Q_n,\ldots,Q_{n+k-1})$. At most $2^{k^2}$ such windows exist. Theorem~\ref{lem:memory} makes the successor window a deterministic function of its predecessor once the recurrence has entered the full $k$-move range. Some two windows recur by pigeonhole, and all later windows agree by induction. Thus the rows are ultimately periodic. The starting $\Pset$ predicate $A_n=\varnothing$ depends on the preceding $k$ rows for $n\ge k$, so it inherits eventual periodicity.
+\end{proof}
+\begin{corollary}[Specialization $m=1$] Every non-full $Q_n$ has at most three consecutive elements.\end{corollary}
+\paragraph{Scope.} Eventual periodicity is not a statement about a least period or an affine formula in $k$. Those stronger claims require separate work.

@@ -1,0 +1,87 @@
+% Generated from paper/theorem_A/main.tex; regenerate if the canonical source changes.
+\documentclass[11pt]{article}
+\usepackage[margin=0.93in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem}
+\usepackage{xcolor,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\allowdisplaybreaks
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newcommand{\Pset}{\mathcal{P}}
+\newcommand{\Nset}{\mathcal{N}}
+\newcommand{\statusproved}{\textbf{Proof status: Proved.}}
+\newcommand{\statusmachine}{\textbf{Proof status: Proved by exact finite certificates plus induction (computer-assisted).}}
+\newcommand{\statusopen}{\textbf{Proof status: Working on (not yet proved).}}
+
+\title{\textbf{Distance-Constrained Dynamic Subtraction Games}\\[0.4em]Theorem A: Interval Structure and Eventual Periodicity}
+\author{Research Team -- draft for independent mathematical review}
+\date{October 9, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}Proved from the rules of the game. This standalone paper gives definitions, proof logic, precise evidence boundaries, and cited sources in the same document.\end{abstract}
+\tableofcontents
+\section{Theorem A: complete structural results}\label{sec:A}
+\statusproved
+\subsection{Rules, notation and outcome recurrence}
+Fix $k\ge1$, $m\ge0$ and a heap of $n\ge0$ counters. From a state $(n,s)$, where $s\in\{1,\ldots,k\}$ is the preceding removal, a legal move removes $r$ counters such that $1\le r\le\min(k,n)$ and $|r-s|>m$. The resulting state is $(n-r,r)$. With no previous removal, the first move has only the first restriction. Normal play applies: a player with no legal move loses. We call losing and winning states respectively $\Pset$- and $\Nset$-positions, following standard combinatorial-game terminology \cite{sprague1935,grundy1939,winningways2001}.
+
+Define the P-state row and its potential P-reaching removals by
+\begin{align}
+Q_n&=\{s\in\{1,\ldots,k\}:(n,s)\text{ is }\Pset\},\\
+A_n&=\{r:1\le r\le\min(k,n),\ r\in Q_{n-r}\}.
+\end{align}
+In particular $Q_0=\{1,\ldots,k\}$, since there is no legal removal. Starting position $n$ (no previous move) is a $\Pset$-position precisely when $A_n=\varnothing$.
+
+\begin{theorem}[Exact interval theorem]\label{thm:Ainterval}
+For every $n\ge0$, the set $Q_n$ is empty, full, or one interval of consecutive integers. More exactly, if $A_n=\varnothing$, then $Q_n=\{1,\ldots,k\}$. Otherwise
+\[
+\boxed{Q_n=\bigl[\max\{1,\max A_n-m\},\ \min\{k,\min A_n+m\}\bigr]\cap\mathbb Z.}
+\]
+An interval whose lower endpoint exceeds its upper endpoint is empty. Any non-full row has at most $2m+1$ entries.
+\end{theorem}
+\begin{proof}
+The legal move $r$ takes $(n,s)$ to a losing state exactly when $r\in A_n$ and $|r-s|>m$. Hence $(n,s)$ is losing precisely when \emph{every} move in $A_n$ fails its previous-removal constraint. Equivalently, $|r-s|\le m$ for every $r\in A_n$. If $A_n$ is empty, this holds for all $1\le s\le k$. Otherwise the inequalities $r-m\le s\le r+m$ for all $r\in A_n$ intersect to $\max A_n-m\le s\le\min A_n+m$, clipped to $1\le s\le k$. Its length is at most $2m+1$.
+\end{proof}
+
+\begin{lemma}[Finite-memory recurrence]\label{lem:memory}
+For fixed $k,m$, $Q_n$ is computed deterministically from $Q_{n-1},\ldots,Q_{n-k}$ whenever $n\ge k$.
+\end{lemma}
+\begin{proof}The membership test $r\in Q_{n-r}$ determines $A_n$ for each $1\le r\le k$; then Theorem~\ref{thm:Ainterval} determines $Q_n$.\end{proof}
+
+\begin{theorem}[Eventual P/N periodicity]\label{thm:Aperiod}
+For every fixed $k\ge1$ and $m\ge0$, the sequence $(Q_n)_{n\ge0}$ is eventually periodic, and so is the unrestricted starting-position P/N sequence.
+\end{theorem}
+\begin{proof}
+Each $Q_n$ is a subset of $\{1,\ldots,k\}$, so there are at most $2^k$ row values. Consider consecutive ordered windows $(Q_n,\ldots,Q_{n+k-1})$. At most $2^{k^2}$ such windows exist. Theorem~\ref{lem:memory} makes the successor window a deterministic function of its predecessor once the recurrence has entered the full $k$-move range. Some two windows recur by pigeonhole, and all later windows agree by induction. Thus the rows are ultimately periodic. The starting $\Pset$ predicate $A_n=\varnothing$ depends on the preceding $k$ rows for $n\ge k$, so it inherits eventual periodicity.
+\end{proof}
+\begin{corollary}[Specialization $m=1$] Every non-full $Q_n$ has at most three consecutive elements.\end{corollary}
+\paragraph{Scope.} Eventual periodicity is not a statement about a least period or an affine formula in $k$. Those stronger claims require separate work.
+
+\section*{Works cited and source verification}
+\addcontentsline{toc}{section}{Works cited and source verification}
+\begin{thebibliography}{9}
+\bibitem{sprague1935}
+R. Sprague, ``\"Uber mathematische Kampfspiele,'' \emph{T\^ohoku Mathematical Journal}, first series, vol.~41 (1935), pp.~438--444.\newline
+Original journal record: \url{https://www.jstage.jst.go.jp/article/tmj1911/41/0/41_0_438/_article}. The metadata and page span were checked against the journal listing.
+\bibitem{grundy1939}
+P.~M. Grundy, ``Mathematics and Games,'' \emph{Eureka}, no.~2 (1939), pp.~6--8.\newline
+Bibliographical entry and link to scanned source at \url{https://oeis.org/A002188/a002188.pdf}; the bibliographical description is corroborated by OEIS. The scan was not used for any copied proof.
+\bibitem{winningways2001}
+E.~R. Berlekamp, J.~H. Conway, and R.~K. Guy, \emph{Winning Ways for Your Mathematical Plays}, vol.~1, second ed., A~K Peters, 2001.\newline
+Publisher record: \url{https://www.routledge.com/Winning-Ways-for-Your-Mathematical-Plays-Volume-1-2nd-Edition/Berlekamp-Conway-Guy/p/book/9781568811307}; verified against publisher and author's publication listings.
+\bibitem{gurvich2012}
+V.~Gurvich, ``On Repetition-free Subtraction Games and Vile-dopey Integers,'' RUTCOR Research Report RRR-01-2012, Rutgers University, January 2012.\newline
+Author's publication list: \url{https://rutcor.rutgers.edu/~gurvich/publist.pdf} (entry 240). A report transcription was located, but its detailed theorems were \emph{not} invoked here.
+\end{thebibliography}
+\textit{Source-use boundary.} The P/N and Sprague--Grundy methods are standard background and are credited above. All specific interval, finite-window, template-obstruction and finite-range arguments in these documents are written self-contained from the game definition, not borrowed from an external proof. Originality relative to \emph{all} prior literature has not been established; a thorough review remains necessary.
+
+\end{document}

@@ -1,6 +1,0 @@
-"repetition-free subtraction game"
-"dynamic subtraction game" "previous move"
-"distance constrained" "subtraction game"
-"Sprague-Grundy" "previous move" subtraction
-"take-away game" "previous move" difference
-"subtraction game" forbidden consecutive move sizes

@@ -229,14 +229,3 @@ Use these labels consistently:
 
 Do not describe literature novelty as established until the dedicated
 literature review is complete.
-
-
-## Exact interval reduction and new region analysis
-
-For `m=1`, let `A_n` be the set of legal heap-removal sizes that lead to P-child states **before** excluding moves too close to the previous move. Then all previous-move indices `s` making `(n,s)` a P-state form the interval
-
-`[max(A_n)-1, min(A_n)+1] ∩ [1,k]`
-
-when `A_n` is nonempty, and the entire row when it is empty. An inverted interval means no P-state in that row. Thus each non-full nonempty row contains at most 3 P-cells. This is a general structural lemma, provable directly from the recurrence for every `k` and `n`.
-
-An exact Python analysis of the `k=58..78` first-period full-state diagrams reconstructs every P-cell with zero mismatches via piecewise-affine/parity row blocks plus explicit short literals. The observed 53 cross-parameter tracks (23 spanning all 21 `k` values) support a symbolic description, but are not yet an all-`k` proof or a compact closed form.

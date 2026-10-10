@@ -1,0 +1,53 @@
+\section{Theorem B: a 21-parameter certified affine regime}\label{sec:B}
+\statusmachine
+\subsection{Certification lemmas}
+\begin{lemma}[Window repetition]\label{lem:Bwindow}
+Fix $k,m$. Suppose for integers $p\ge1,t\ge0$,
+$Q_{t+i}=Q_{t+p+i}$ for every $0\le i<k$. Then $Q_n=Q_{n+p}$ for all $n\ge t$.
+\end{lemma}
+\begin{proof}
+The given $k$ equalities form the induction base. For $n\ge t+k$, each row used in the calculation of $A_n$ is $Q_{n-r}$ for $1\le r\le k$, and the corresponding row for $A_{n+p}$ is $Q_{n+p-r}$. These rows agree by induction; therefore their potential-removal sets and the resulting $Q$ rows agree by the exact recurrence in Theorem~\ref{thm:Ainterval}. Since $n\ge t+k\ge k$, both states allow all removal sizes through $k$.
+\end{proof}
+\begin{lemma}[Starting-position bridge]\label{lem:Bbridge}
+Under Lemma~\ref{lem:Bwindow}, the starting-position P/N sequence has period $p$ for all $n\ge t+k$. A proposed $p$-periodic formula is valid for every $n\ge0$ if it matches the exact starting P/N outcome for $0\le n\le t+k+p-1$.
+\end{lemma}
+\begin{proof}For $n\ge t+k$, each child row $Q_{n-r}$ agrees with $Q_{n+p-r}$, and all removals $1\le r\le k$ are available. Thus $A_n=A_{n+p}$, so the starting outcomes agree. The finite bound includes the entire earlier prefix and one complete period beyond $t+k$; any subsequent index reduces to that verified range.\end{proof}
+\begin{theorem}[Exact certified $A=86$ regime]\label{thm:B}
+For each integer $58\le k\le78$, the unrestricted starting position of $D(k,1)$ with $n$ counters is losing precisely when
+\[\boxed{n\bmod(2k+88)\in\{0,86,k+87\}.}\]
+The least positive period of this starting P/N sequence is $2k+88$.
+\end{theorem}
+\begin{proof}[Finite computation and mathematical induction]
+Fix one of the 21 values $k=58,\ldots,78$. The script \texttt{src/verify\_theorems\_ab.py} computes each $Q_n$ by the integer recurrence of Theorem~\ref{thm:Ainterval}. With $p=2k+88$, it finds the exact $t$ shown in Table~\ref{tab:Bcert} and asserts the $k$ row equalities in Lemma~\ref{lem:Bwindow}. It also verifies the proposed start predicate for every $0\le n\le t+k+p-1$. Lemmas~\ref{lem:Bwindow} and~\ref{lem:Bbridge} therefore prove the infinite-$n$ claim for this fixed $k$. The script repeats these finite checks for each of the 21 listed integers. It additionally compares the rows and unrestricted starts with an independent direct Sprague--Grundy implementation over the verified range.
+
+To establish minimality, set $R=\{0,86,k+87\}$ in the cyclic group of order $p$. If a nonzero shift fixes a set of three elements, its translation orbits must each have length three, so $R=\{0,p/3,2p/3\}$. Its smaller nonzero element would therefore be $p/3$. Yet $p/3=(2k+88)/3<86$ for $58\le k\le78$, contradicting $\min(R\setminus\{0\})=86$. Thus the period is least.
+\end{proof}
+\subsection{Exact reproduced certificates}
+\begin{longtable}{rrrrl}
+\caption{Theorem B, corrected finite-window certificates. The bridge endpoint is inclusive.}\label{tab:Bcert}\\
+\toprule $k$ & $p$ & $t$ & bridge end & independent SG \\
+\midrule\endfirsthead\toprule $k$ & $p$ & $t$ & bridge end & independent SG \\
+\midrule\endhead
+58 & 204 & 58 & 319 & PASS \\
+59 & 206 & 59 & 323 & PASS \\
+60 & 208 & 59 & 326 & PASS \\
+61 & 210 & 59 & 329 & PASS \\
+62 & 212 & 59 & 332 & PASS \\
+63 & 214 & 58 & 334 & PASS \\
+64 & 216 & 59 & 338 & PASS \\
+65 & 218 & 0 & 282 & PASS \\
+66 & 220 & 0 & 285 & PASS \\
+67 & 222 & 0 & 288 & PASS \\
+68 & 224 & 0 & 291 & PASS \\
+69 & 226 & 0 & 294 & PASS \\
+70 & 228 & 0 & 297 & PASS \\
+71 & 230 & 0 & 300 & PASS \\
+72 & 232 & 0 & 303 & PASS \\
+73 & 234 & 0 & 306 & PASS \\
+74 & 236 & 0 & 309 & PASS \\
+75 & 238 & 0 & 312 & PASS \\
+76 & 240 & 0 & 315 & PASS \\
+77 & 242 & 0 & 318 & PASS \\
+78 & 244 & 0 & 321 & PASS \\
+\bottomrule\end{longtable}
+\paragraph{Unresolved extension (Working on).} The 21 instances constitute a completed computer-assisted proof, not a uniform symbolic derivation for arbitrary $k$. Explicit P-row formulas explaining the numbers 86 and 88 and the boundary at $k=78$ remain \emph{Working on}. See Theorem C.
