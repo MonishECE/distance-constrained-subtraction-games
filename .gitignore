@@ -13,6 +13,7 @@ distance_subtraction_research
 # LaTeX build products
 *.aux
 *.log
+!logs/*.log
 *.out
 *.toc
 *.synctex.gz

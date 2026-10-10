@@ -1,0 +1,474 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,enumitem,graphicx,xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,pdftitle={Finite-State Theorems for Distance-Constrained Dynamic Subtraction Games}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{.5em}
+\setlist[itemize]{leftmargin=2em}\setlist[enumerate]{leftmargin=2em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\DeclareMathOperator{\mex}{mex}
+\newcommand{\K}{\{1,\ldots,k\}}
+\newcommand{\Pn}{\mathcal{P}}
+\newcommand{\Nn}{\mathcal{N}}
+
+\title{\textbf{Distance-Constrained Dynamic Subtraction Games:}\\
+An Interval Structure Theorem and a Certified Affine Regime}
+\author{Research Team\\\small Computational research manuscript --- author review required}
+\date{9 October 2026 --- reproducible research draft}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+We consider a one-heap normal-play subtraction game in which a player may remove
+at most $k$ counters, but a removal $r$ following a removal $s$ must satisfy
+$|r-s|>m$.  We show that the losing previous-move states at any fixed heap size
+form an integer interval (possibly empty), which for $m=1$ has width at most
+three unless it is the entire previous-move set.  We also establish eventual
+periodicity of the full previous-move outcome sequence for every fixed pair
+$(k,m)$ by a finite-memory argument.  These statements form Theorem A and
+admit elementary mathematical proofs.  For the principal case $m=1$ we then
+give a separately labeled, reproducible \emph{computer-assisted finite-range
+proof} (Theorem B): for each integer $58\le k\le78$, the unrestricted starting
+heap sizes that are losing are exactly
+$n\equiv0,86,k+87\pmod{2k+88}$.  An independently implemented
+Boolean interval recurrence, finite $k$-row cycle witnesses, a verified
+finite-prefix bridge, and direct Sprague--Grundy cross-checks supply the
+certificate.  This does not yet give a uniform symbolic explanation of the
+affine period or the endpoints $58,78$.  We make this distinction explicit,
+provide checkable evidence, and formulate the remaining proof problem.
+\end{abstract}
+
+\textbf{Keywords:} combinatorial game theory; impartial games; subtraction
+games; P-positions; eventual periodicity; finite-state certificate.
+\tableofcontents
+\newpage
+
+\section{Introduction and research question}
+Ordinary subtraction games use a prescribed set of permissible removals.
+Repetition-free subtraction games add a dependence on the previous removal;
+Gurvich's study of that setting is a direct point of comparison
+\cite{gurvich2012}.  We investigate the modified constraint that consecutive
+removals must differ by more than a fixed nonnegative integer $m$.
+
+A first computational investigation revealed structured periodic sets of
+initial losing heap sizes as the maximum removal $k$ varies.  The objective
+is twofold: to find rigorous general results about the states and to prove
+specific parameter-dependent period formulas.  We distinguish four levels
+of mathematical status throughout this manuscript:
+\begin{itemize}
+\item \textbf{Definition or deduction:} a statement proved from the game rules.
+\item \textbf{Finite computation:} an output observed in a bounded calculation.
+\item \textbf{Certified fixed-parameter result:} an infinite statement for a
+fixed parameter established from a finite, independently checkable certificate
+plus a proved recurrence invariant.
+\item \textbf{Uniform symbolic theorem:} a result verified by a mathematical
+argument valid for all parameters in the stated family without enumerating
+the individual parameter values.
+\end{itemize}
+
+Theorem A belongs to the first category. Theorem B belongs to the third;
+a uniform symbolic proof and a parameter-boundary explanation remain open.
+This terminology also prevents a finite-tail period detector from being
+mistaken for a periodicity proof.
+
+\section{Game definition and normal-play outcomes}
+Let $k\ge1$ and $m\ge0$ be integers.  In $D(k,m)$, a heap contains $n\ge0$
+counters.  The current player removes an integer
+$1\le r\le\min(k,n)$.  Except on the first turn, the previous removal $s$
+is part of the state and legality requires $|r-s|>m$.
+The player with no legal move loses; this includes cases with counters left
+but all removal sizes forbidden.
+
+After a first move a state is $(n,s)$ with $s\in\K$.  Its legal children are
+\[
+\mathcal{M}_{k,m}(n,s)
+=\{(n-r,r): 1\le r\le\min(k,n),\;|r-s|>m\}.
+\]
+Let $P(n,s)$ mean that $(n,s)$ is a previous-player winning position,
+equivalently losing for the player to move.  Then
+\begin{equation}\label{eq:pn}
+P(n,s)\iff\forall r\in\{1,\ldots,\min(k,n)\}
+\text{ with }|r-s|>m,\quad \neg P(n-r,r).
+\end{equation}
+The empty universal quantification is true, so every $(0,s)$ is P.
+For the unrestricted starting heap, write $P_0(n)$ for the same outcome
+without a previously played removal.
+
+For context, the standard Sprague--Grundy recurrence assigns
+\begin{equation}\label{eq:grundy}
+g(n,s)=\mex\{g(n-r,r):(n-r,r)\in\mathcal{M}_{k,m}(n,s)\},
+\end{equation}
+and $g_0(n)=\mex\{g(n-r,r):1\le r\le\min(k,n)\}$.
+The classical theory implies $P(n,s)$ exactly when $g(n,s)=0$
+\cite{sprague1935,grundy1939,winningways2001}.  Our Boolean solver determines
+whether $g$ is zero; it does \emph{not} compute its nonzero values.
+
+\section{Theorem A: exact row structure and eventual periodicity}
+For fixed $k,m$ define the set of P-state previous removals
+\[
+Q_n=\{s\in\K:P(n,s)\}
+\]
+and the \emph{potential P-reaching moves}
+\begin{equation}\label{eq:An}
+A_n=\{r\in\{1,\ldots,\min(k,n)\}:r\in Q_{n-r}\}.
+\end{equation}
+The word ``potential'' matters: the membership test does not impose the
+current previous-move constraint.  Rather, it records all removals reaching a
+P-child, from which legality for each $s$ can be recovered.
+
+\begin{lemma}[Boolean outcome invariant]\label{lem:invariant}
+For every $n\ge0$, $s\in\K$ and $m\ge0$,
+\begin{equation}\label{eq:invariant}
+P(n,s)\iff A_n\subseteq\{s-m,\ldots,s+m\},
+\qquad
+P_0(n)\iff A_n=\varnothing.
+\end{equation}
+\end{lemma}
+\begin{proof}
+A move $r$ reaches a P-child exactly when $r\in A_n$.
+From $(n,s)$ it is additionally legal exactly when $|r-s|>m$.
+Thus $(n,s)$ is P if and only if no member of $A_n$ is legal,
+which is precisely the first inclusion.  At the first turn no removal is
+excluded by a previous move, so the unrestricted position is P precisely
+when there is no P-reaching removal, i.e., $A_n=\varnothing$.
+\end{proof}
+
+\begin{theorem}[Theorem A1: interval row theorem]\label{thm:interval}
+For all integers $k\ge1$, $m\ge0$ and $n\ge0$, $Q_n$ is either empty or an
+integer interval inside $\K$.  More precisely, if $A_n=\varnothing$, then
+$Q_n=\K$.  Otherwise, letting $a_n=\min A_n$ and $b_n=\max A_n$,
+\begin{equation}\label{eq:interval}
+\boxed{
+Q_n=\bigl[\max(1,b_n-m),\;\min(k,a_n+m)\bigr]\cap\mathbb Z,
+}
+\end{equation}
+where a lower endpoint greater than its upper endpoint denotes the empty
+set.  If $A_n\ne\varnothing$ and $Q_n\ne\varnothing$, its cardinality is
+at most $2m+1$.  In particular, for $m=1$ it has at most three elements.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:invariant}, each $r\in A_n$ must satisfy
+$r-m\le s\le r+m$.  Intersecting these inequalities yields
+\[
+\max_{r\in A_n}(r-m)\le s\le\min_{r\in A_n}(r+m),
+\]
+which equals $b_n-m\le s\le a_n+m$.  Clipping to
+$1\le s\le k$ proves the formula.  If nonempty, its width is bounded by
+$(a_n+m)-(b_n-m)+1\le2m+1$ because $a_n\le b_n$.
+\end{proof}
+
+\begin{corollary}[Compact outcome alphabet]\label{cor:alphabet}
+For each fixed $k,m$, the full P/N row $Q_n$ takes values among
+$1+k(k+1)/2$ possibilities (the empty set and all nonempty integer
+intervals).  For $m=1$, all non-full, nonempty rows contain at most
+three successive previous-move values.
+\end{corollary}
+
+\begin{theorem}[Theorem A2: eventual periodicity]\label{thm:eventual}
+For every fixed pair of integers $k\ge1$ and $m\ge0$, there exist
+integers $t\ge0$ and $p\ge1$ such that
+\[
+\boxed{Q_{n+p}=Q_n\qquad(n\ge t).}
+\]
+Moreover, the unrestricted starting outcome $P_0(n)$ is eventually periodic
+with a period dividing $p$.
+\end{theorem}
+\begin{proof}
+For $n\ge k$, every candidate removal is in $\K$, and
+Equation~\eqref{eq:An} constructs $A_n$ entirely from
+$Q_{n-1},\ldots,Q_{n-k}$.  By Theorem~\ref{thm:interval},
+$Q_n$ is then a deterministic function of those previous $k$ rows.
+Consequently the window
+$W_n=(Q_{n-k+1},\ldots,Q_n)$ evolves deterministically for $n\ge k-1$.
+Each row is one of finitely many subsets of $\K$, so there are finitely
+many windows.  The infinite sequence of windows must repeat; deterministic
+evolution forces subsequent windows to repeat with the same positive shift.
+This yields $Q_{n+p}=Q_n$ for all sufficiently large $n$.
+Finally, $P_0(n)$ is equivalent to $A_n=\varnothing$ by
+Lemma~\ref{lem:invariant}.  Once all rows $Q_{n-r}$ for $1\le r\le k$
+lie in the periodic tail, the same computation gives
+$A_{n+p}=A_n$ and hence $P_0(n+p)=P_0(n)$.
+Its least period therefore divides the full-state period $p$.
+\end{proof}
+
+\begin{remark}
+The proof establishes eventual periodicity but gives neither the least
+period nor a useful description of its dependence on $k$.  Theorem B
+addresses that harder quantitative question over one finite parameter
+interval.  Theorem A is proved directly from the game's rules; standard
+P/N and Grundy theory is cited for context and terminology.
+\end{remark}
+
+\section{Algorithms, verification methodology, and original data}
+\subsection{Independent computational methods}
+The research repository contains the original Python SG engine, an optimized
+C++17 SG scanner, a Boolean bitset solver, an exact affine geometric
+extractor, and an integer-interval row classifier.  The present audit adds
+\texttt{src/verify\_theorems\_ab.py} to verify the two formal results
+independently of the original period-scanning heuristic.
+
+The interval recurrence uses Lemma~\ref{lem:invariant} and
+Theorem~\ref{thm:interval}.  If $A_n$ is empty, write a full P row;
+otherwise write the clipped interval in Equation~\eqref{eq:interval}.
+The code computes every $A_n$ from previously computed rows and requires no
+floating-point arithmetic.
+
+An unrelated \emph{naive} Boolean implementation explicitly quantifies over
+legal moves for each state.  The two implementations are compared for
+$k=1,\ldots,9$, $m=0,1,2,3$, and $0\le n\le75$ (36 parameter cases).
+For the 21 main parameter values, the interval rows and unrestricted
+starting flags are also compared against direct SG evaluation over the
+finite range used in the certificate.
+
+\subsection{Why a long numerical scan is not a proof}
+The exploratory C++ study scanned $m=1$, $35\le k\le120$ through
+$n=500{,}000$.  It found, among other structures, an affine regime
+\[
+42\le k\le52:\quad p=2k+56,\quad
+P_0(n)\iff n\equiv0,54,k+55\pmod p,
+\]
+and the regime targeted below.  These were discoveries, not certificates.
+In particular, a shorter $k=80$ scan suggested a misleading long transient,
+whereas a later deep scan produced a different period candidate.  The
+underlying lesson is that an observed repeated tail does not itself prove
+infinite continuation.
+
+\section{Finite-window certificate lemma}
+\begin{lemma}[Repeated windows force a full-state cycle]\label{lem:window}
+Fix $k,m$ and let $p\ge1$.  Suppose for some $t\ge0$ that
+\begin{equation}\label{eq:window}
+Q_{t+i}=Q_{t+p+i}\quad\text{for every }0\le i<k.
+\end{equation}
+Then $Q_{n+p}=Q_n$ for every $n\ge t$.
+\end{lemma}
+\begin{proof}
+Equation~\eqref{eq:window} supplies the first $k$ equal pairs.
+For $n\ge t+k$, the rows needed to compute $Q_n$ are
+$Q_{n-r}$, $1\le r\le k$.  Each has a matching row $Q_{n-r+p}$
+by the inductive hypothesis, so the computed potential move sets
+$A_n$ and $A_{n+p}$ are equal.  Theorem~\ref{thm:interval}
+then gives $Q_n=Q_{n+p}$.  The first inductive step has $n\ge k$,
+so the unrestricted removal range is already $1,\ldots,k$.
+\end{proof}
+
+\begin{lemma}[Finite bridge for unrestricted starting positions]
+\label{lem:bridge}
+Under the assumptions of Lemma~\ref{lem:window}, the initial P/N sequence
+is $p$-periodic for all $n\ge t+k$.
+If a proposed $p$-periodic formula agrees with $P_0(n)$ for every
+\begin{equation}\label{eq:bridge}
+0\le n\le t+k+p-1,
+\end{equation}
+then it agrees for all $n\ge0$.
+\end{lemma}
+\begin{proof}
+For $n\ge t+k$, the candidate removals in $A_n$ are all $1\le r\le k$,
+while their child rows satisfy $Q_{n+p-r}=Q_{n-r}$ by
+Lemma~\ref{lem:window}.  Hence $A_{n+p}=A_n$ and
+$P_0(n+p)=P_0(n)$.  The tested interval contains the entire
+nonperiodic prefix $0,\ldots,t+k-1$ and one full period of the
+eventual periodic region $t+k,\ldots,t+k+p-1$.  Repeated subtraction
+of $p$ reduces any later index to that verified period.
+\end{proof}
+
+\section{Theorem B: certified affine starting-position regime}
+\begin{theorem}[Theorem B: exact finite-range affine classification]
+\label{thm:B}
+For each integer $k$ with $58\le k\le78$, consider the unrestricted
+starting state of $D(k,1)$ with $n\ge0$ counters.  Then this state is a
+P-position if and only if
+\begin{equation}\label{eq:B}
+\boxed{n\equiv0,\ 86,\ \text{or }k+87\pmod{2k+88}.}
+\end{equation}
+The least positive period of the unrestricted binary P/N sequence is
+$2k+88$.
+
+\emph{Proof status: finite-range computer-assisted theorem.}  The statement
+is infinite in $n$, but its 21 integer parameter instances are established
+by the finite recurrence checks in the accompanying audit script and the
+inductive Lemmas~\ref{lem:window}--\ref{lem:bridge}; no uniform symbolic
+formula for all full-state rows is claimed.
+\end{theorem}
+
+\begin{proof}[Computer-assisted proof of Theorem B]
+Fix one $k\in\{58,\ldots,78\}$ and set $p=2k+88$.  The script
+\texttt{src/verify\_theorems\_ab.py} computes $Q_n$ using the exact
+integer recurrence of Theorem~\ref{thm:interval}.  It searches for
+$t\in\{0,1,\ldots,k\}$ satisfying the $k$ exact row equalities
+\eqref{eq:window}, and asserts that a witness exists.
+The computed $t$ for each $k$ is recorded in
+Table~\ref{tab:cert}.  Lemma~\ref{lem:window} proves from those equalities
+that the \emph{full-state} rows repeat forever beyond $t$.
+
+Next the script compares every computed unrestricted P/N flag for
+$0\le n\le t+k+p-1$ with the predicate
+\[
+(n\bmod p)\in\{0,86,k+87\}.
+\]
+All comparisons pass for each $k$ in the stated range.  By
+Lemma~\ref{lem:bridge}, these finitely many checks imply
+Equation~\eqref{eq:B} for every $n\ge0$.
+
+For least-period minimality, let $R=\{0,86,k+87\}\subset\mathbb Z/p\mathbb Z$.
+If the periodic binary sequence had a smaller period, the
+three-element residue set would be invariant under some shift whose
+orbit length is a proper divisor of three, necessarily an orbit of
+length three.  Thus $R$ would have to be the equally spaced set
+$\{0,p/3,2p/3\}$.  But throughout $58\le k\le78$,
+\[
+68\le p/3\le244/3<86< 2p/3,
+\]
+so $86$ cannot be one of the two nonzero equally spaced residues.
+Therefore $p$ is the least positive period.
+
+The results of all 21 finite computations are included in the generated
+audit table, alongside reproducible program source and CSV hashes.  Direct
+SG cross-checks independently agree on every computed outcome through the
+required bridge bound.  This completes the stated finite-range,
+computer-assisted proof, conditional only on the audit code executing as
+provided; it is \emph{not} a parameter-uniform hand derivation of the
+formula.
+\end{proof}
+
+\subsection{Complete fixed-parameter certificate table}
+\input{generated/certificate_rows.tex}
+
+\subsection{Representative full-state structure}
+For $k=68$, the formula gives $p=224$ and starting P-residues
+$\{0,86,155\}$.  The computed full-state diagram, rather than only the
+unrestricted starting outcomes, exhibits full rows and short diagonal
+interval families:
+\begin{center}
+\IfFileExists{../figures/full_state_k68_p_positions.png}{%
+  \includegraphics[width=.95\linewidth]{../figures/full_state_k68_p_positions.png}
+}{\emph{Place the repository's figures directory next to paper to render the heatmap.}}
+\end{center}
+The figure is exploratory evidence for a concise eventual symbolic
+classification; it is not used as a proof of Theorem~\ref{thm:B}.
+
+\section{Exact row mining and the remaining symbolic proof problem}
+The geometric extraction initially identified exact line segments,
+including structures described by $n-s=C$, but did not classify all
+P-state cells using its selected families.  Applying
+Theorem~\ref{thm:interval} row-by-row eliminates that geometric omission:
+all computed P-states can be represented exactly as full rows, empty rows,
+or short integer intervals.
+
+The separate \texttt{row\_interval\_classifier.py} and its CSV outputs
+compress many rows into affine blocks and track recurring formulas across
+$k=58,\ldots,78$.  Such a representation is an exact \emph{computed}
+classification of those finite state tables.  Some rows still require
+explicit exceptions, and the compressed representation is not yet a
+uniform nonrecursive formula for all $n$ and all permitted $k$.
+
+A natural next target is to construct a piecewise function
+\begin{equation}\label{eq:F}
+F_k(u)\subseteq\K,\qquad 0\le u<2k+88,
+\end{equation}
+using finitely many affine interval formulas.  To prove it symbolically,
+one must show that the associated P-reaching set
+\[
+B_n=\{r\in\{1,\ldots,\min(k,n)\}:r\in F_k((n-r)\bmod p)\}
+\]
+regenerates $F_k(n\bmod p)$ by Theorem~\ref{thm:interval}, with
+special attention to the full-state transient for $k=58,\ldots,64$.
+This is a well-defined collection of symbolic inequalities in $n,k$.
+It is not solved by the certificates in this paper.
+
+\section{Boundary checks, limitations, and originality}
+The same candidate formula fails at the neighboring parameters
+$k=57$ and $k=79$ in finite computations, providing counterexamples
+to extending Theorem B unchanged.  These failures suggest that the
+bounds $58$ and $78$ reflect changes in the full-state geometry, but
+we have not derived those bounds from general symbolic inequalities.
+
+The observed regime $42\le k\le52$ exhibits the related empirical pattern
+$p=2k+56$ and residue set $\{0,54,k+55\}$.  Both patterns fit the template
+\[
+p=2k+A+2,\qquad R=\{0,A,k+A+1\},
+\]
+with $A=54$ or $86$.  No general infinite family in $A$ is claimed.
+Moreover, it has not yet been established that the variant $D(k,m)$ and
+its particular affine classifications are new relative to all prior
+literature.  Gurvich \cite{gurvich2012} explicitly studies
+repetition-free subtraction games, so comparisons must be checked
+carefully before making a novelty claim.
+
+The calculation is finite and fully reproducible, but independent
+replication, code review, and team-authored exposition remain essential.
+In particular, a computer-assisted proof and a closed-form symbolic proof
+answer different mathematical questions.
+
+\section{Conclusion and completed workflow}
+This research progressed through the following verifiable stages:
+\begin{enumerate}
+\item Define the history-dependent move constraint and enlarge states to $(n,s)$.
+\item Implement a direct SG recurrence and an optimized independent scanner.
+\item Identify candidate affine periods from deep scans, then distinguish
+finite-tail observations from proven infinite continuation.
+\item Replace nonzero SG tracking with the Boolean potential-move set $A_n$.
+\item Prove Theorem A1 (interval row structure) and Theorem A2 (eventual
+full-state and starting-position periodicity) directly.
+\item Exploit finite memory: one repeated pair of complete $k$-row
+windows proves indefinitely repeated future full-state outcomes.
+\item Check the finite-prefix bridge for every $k=58,\ldots,78$, with
+independent direct SG verification, to obtain Theorem B.
+\item Explore affine and row-interval structure to identify the outstanding
+parameter-uniform symbolic classification problem.
+\end{enumerate}
+
+\textbf{Conclusion.}  The general eventual periodicity and interval
+structure are now rigorous mathematical statements.  The affine period
+$2k+88$ and residue set $\{0,86,k+87\}$ are exactly established for all
+21 specified integer values of $k$ by a checkable finite-state proof.
+What remains open is a compact parameter-uniform explanation of the
+full-state intervals and of the regime boundaries, followed by a broader
+classification across additional parameter ranges.
+
+\paragraph{Authorship and computational assistance.}
+This document is an AI-assisted research draft, not a record of an
+independent human-written submission.  The student team should independently
+review the proofs, validate all computations, verify the bibliography,
+and disclose computational/AI assistance as required by its institution or
+competition.  The original external sources are credited separately below;
+no external proof text is reproduced.
+
+\section*{Works cited}
+\addcontentsline{toc}{section}{Works cited}
+\input{references.tex}
+
+\appendix
+\section{Reproduction instructions and certificate contract}
+From the repository root, run
+\begin{verbatim}
+python src/verify_theorems_ab.py \
+ --out data/certificates/theorem_B_audit.csv \
+ --summary data/certificates/theorem_B_audit.json
+\end{verbatim}
+The checker verifies 36 small $(k,m)$ cases against an independently
+written Boolean game recursion; for each of 21 primary $k$ values, it
+computes exact interval rows and a repeated $k$-row window at distance
+$p=2k+88$, checks all starting P-flags through $t+k+p-1$, cross-checks
+outcomes against a direct SG computation through the same bound, and
+checks period minimality.  This is the reproducible finite certificate
+underlying Theorem B.  See \texttt{PROOF\_AUDIT.md} for its invariants.
+
+\section{Research-history preservation}
+The original repository paper from the oldest commit (4 October 2026)
+is archived unchanged as \texttt{paper/archive/main\_initial\_2026-10-04.tex}.
+Its earlier table's ``prefix checked through'' values were shorter than
+the bound actually used to bridge from full-state periodicity to starting
+periodicity; they have been replaced by the mathematically sufficient
+$t+k+p-1$ bound in this draft.  The certificate results themselves did
+not change. The historical archive is provided for provenance, not as
+a source to be cited as an independently published result.
+\end{document}
