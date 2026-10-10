@@ -1,1 +1,1 @@
-Upload main.tex alone to a blank Overleaf project, choose pdfLaTeX and recompile. For a theorem-specific document upload the corresponding theorem_*.tex alone and set it as main. All references and prerequisite sections are included. No external inputs, figures or bibliography files are required.
+Upload main.tex alone to a blank Overleaf project and select pdfLaTeX. For an individual theorem upload the corresponding theorem_*.tex and select it as the main file. No other assets or BibTeX run are required.
