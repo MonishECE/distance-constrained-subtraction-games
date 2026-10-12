@@ -1,0 +1,13 @@
+{
+  "theorem_D_fixed_k_certificates": 44,
+  "parameters": [
+    170,
+    213
+  ],
+  "A": 214,
+  "boundary_counterexamples": 4,
+  "all_passed": true,
+  "uniform_symbolic_regime_theorem": "WORKING ON",
+  "certificate_csv_sha256": "48250ad2f1b351febfef87450fe8472a754be67da59d30051ebdf9f4086cd294",
+  "boundary_csv_sha256": "1ce353009ff269f207020c3ae8b91f5347c1b3de67353134ff01774f2366f244"
+}
