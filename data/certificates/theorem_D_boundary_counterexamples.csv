@@ -1,0 +1,5 @@
+k,A,candidate_period,first_counterexample_n,predicted_P,actual_P,naive_crosscheck,status
+169,214,554,170,False,True,PASS,PROVED: proposed template fails at this k
+214,214,644,214,True,False,PASS,PROVED: proposed template fails at this k
+215,214,646,214,True,False,PASS,PROVED: proposed template fails at this k
+168,214,552,169,False,True,PASS,PROVED: proposed template fails at this k
