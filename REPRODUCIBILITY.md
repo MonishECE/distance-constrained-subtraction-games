@@ -4,8 +4,8 @@ Run from the repository root using Python 3.10+ with assertions enabled (do not 
 
 ```console
 python src/verify_package.py
-python src/verify_theorems_ab.py
-python src/verify_theorem_c.py
+python methodology/theorem_B/verify_theorems_ab.py
+python methodology/theorem_C/verify_theorem_c.py
 python src/distance_subtraction_research.py self-test
 python src/affine_region_extractor.py self-test
 ```
