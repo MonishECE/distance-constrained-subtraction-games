@@ -13,10 +13,15 @@ We study an impartial take-away game where consecutive removals must differ by m
 \section{Research context, question, and method}
 A move of size $r$ after a previous removal $s$ is legal only if $|r-s|>m$. This history dependence makes the state $(n,s)$ essential. We ask which starting heap sizes are losing, why their binary sequence becomes periodic, and whether explicit periods and residues depend affinely on the maximum move $k$. Standard Sprague--Grundy theory motivates the P/N recurrence \cite{sprague1935,grundy1939,winningways2001}. Prior work on repetition-free subtraction games provides an adjacent literature thread rather than a borrowed solution of the present $m=1$ game \cite{gurvich2012}.
 
-We followed this process: (i) model the full state and derive an exact Boolean recurrence; (ii) independently cross-check it against naive P/N and direct Sprague--Grundy solvers; (iii) identify candidate affine residue patterns by exploratory scan; (iv) prove a finite-window implication by induction; (v) verify exact base windows and the necessary finite starting prefix for each fixed $k$; (vi) classify exceptional parameter boundaries, and (vii) identify conjectural claims explicitly as \emph{Open}. The source code and data are under \texttt{src/} and \texttt{data/certificates/}.
-\input{theorem_A/body.tex}
-\input{theorem_B/body.tex}
-\input{theorem_C/body.tex}
+We followed this process: (i) model the full state and derive an exact Boolean recurrence; (ii) independently cross-check it against naive P/N and direct Sprague--Grundy solvers; (iii) identify candidate affine residue patterns by exploratory scan; (iv) prove a finite-window implication by induction; (v) verify exact base windows and the necessary finite starting prefix for each fixed $k$; (vi) classify exceptional parameter boundaries, and (vii) identify conjectural claims explicitly as \emph{Open}. The source code and data are under \texttt{src/} and \texttt{data/certificates/}; per-theorem verification scripts and method notes are organized under \texttt{methodology/} and summarized in Section~\ref{sec:methodology}.
+\input{theorems/theorem_A.tex}
+\input{theorems/theorem_B.tex}
+\input{theorems/theorem_C.tex}
+\section{Verification methodology}\label{sec:methodology}
+Each theorem above is paired with an explicit verification method: the exact recurrence or finite-certificate pipeline that justifies it, the scripts that execute it, and the certificate files that record the outcome. The per-theorem method notes below live under \texttt{methodology/} alongside the scripts themselves.
+\input{../methodology/theorem_A/method.tex}
+\input{../methodology/theorem_B/method.tex}
+\input{../methodology/theorem_C/method.tex}
 \section{Research conclusion and limitations}
 The interval theorem and general eventual periodicity are mathematical results independent of computation. Two exact finite-$k$ starting-position classifications are established by computer-assisted certificates and induction, not merely by long observed sequences. Theorem C supplies a universal necessary condition $k<A$ for any valid $A$-template and identifies the exact period-collapse mechanism at $k=A-1$. Its second family extends the previous data report to $k=53$, where the least starting period is only $54$ despite the larger displayed modulus $162$. These results offer a concrete arithmetic boundary explanation, but not a uniform symbolic reason for the emergence of $54$ and $86$ or the upper endpoint $78$. \emph{Open:} a closed-form full-state classification, a parameter-uniform proof, and any infinite sequence of $A$ values. Independent proof review and a broader priority literature review remain essential before a novelty claim.
 \input{shared/works_cited.tex}
