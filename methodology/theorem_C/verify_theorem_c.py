@@ -2,13 +2,16 @@
 """Exact fixed-parameter certificates and boundary counterexamples for Theorem C.
 
 No sympy or external packages; NOT a symbolic parameter-uniform proof.
-Run from repository root: python src/verify_theorem_c.py
+Run from repository root: python methodology/theorem_C/verify_theorem_c.py
 """
 from __future__ import annotations
 import csv
 import hashlib
 import json
+import sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'theorem_B'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
 from verify_theorems_ab import interval_solver, naive_solver
 from full_state_analysis import direct_sg_pn
 

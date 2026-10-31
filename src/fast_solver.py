@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 
 def fast_interval_solver(k: int, m: int, upto: int):
@@ -64,6 +65,7 @@ def fast_interval_solver(k: int, m: int, upto: int):
 
 
 def crosscheck(kmax: int = 60, nmax: int = 120, mmax: int = 4) -> int:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'methodology/theorem_B'))
     from verify_theorems_ab import interval_solver, naive_solver
     checks = 0
     for k in range(1, kmax + 1):

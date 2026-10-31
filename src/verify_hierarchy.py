@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, 'src')
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'methodology/theorem_B'))
 from fast_solver import fast_interval_solver
 from verify_theorems_ab import interval_solver, naive_solver
 from full_state_analysis import boolean_solver, direct_sg_pn

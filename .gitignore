@@ -4,6 +4,9 @@ __pycache__/
 .venv/
 venv/
 
+# Local resumable computation cache; published CSV/summary are tracked.
+/data/certificates/regime_hierarchy_j13_records.jsonl
+
 # C/C++ build outputs
 *.o
 *.obj

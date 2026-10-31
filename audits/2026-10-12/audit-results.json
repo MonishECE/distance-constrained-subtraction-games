@@ -1,0 +1,2462 @@
+{
+  "certificates": [
+    {
+      "family": "B",
+      "k": 58,
+      "N": 2564,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 59,
+      "N": 2590,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 60,
+      "N": 2616,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 61,
+      "N": 2642,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 62,
+      "N": 2668,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 63,
+      "N": 2694,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 64,
+      "N": 2720,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 65,
+      "N": 2746,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 66,
+      "N": 2772,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 67,
+      "N": 2798,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 68,
+      "N": 2824,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 69,
+      "N": 2850,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 70,
+      "N": 2876,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 71,
+      "N": 2902,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 72,
+      "N": 2928,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 73,
+      "N": 2954,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 74,
+      "N": 2980,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 75,
+      "N": 3006,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 76,
+      "N": 3032,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 77,
+      "N": 3058,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "B",
+      "k": 78,
+      "N": 3084,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 42,
+      "N": 1764,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 43,
+      "N": 1790,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 44,
+      "N": 1816,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 45,
+      "N": 1842,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 46,
+      "N": 1868,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 47,
+      "N": 1894,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 48,
+      "N": 1920,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 49,
+      "N": 1946,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 50,
+      "N": 1972,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 51,
+      "N": 1998,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 52,
+      "N": 2024,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "C",
+      "k": 53,
+      "N": 2050,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 170,
+      "N": 7012,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 171,
+      "N": 7038,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 172,
+      "N": 7064,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 173,
+      "N": 7090,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 174,
+      "N": 7116,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 175,
+      "N": 7142,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 176,
+      "N": 7168,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 177,
+      "N": 7194,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 178,
+      "N": 7220,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 179,
+      "N": 7246,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 180,
+      "N": 7272,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 181,
+      "N": 7298,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 182,
+      "N": 7324,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 183,
+      "N": 7350,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 184,
+      "N": 7376,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 185,
+      "N": 7402,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 186,
+      "N": 7428,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 187,
+      "N": 7454,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 188,
+      "N": 7480,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 189,
+      "N": 7506,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 190,
+      "N": 7532,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 191,
+      "N": 7558,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 192,
+      "N": 7584,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 193,
+      "N": 7610,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 194,
+      "N": 7636,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 195,
+      "N": 7662,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 196,
+      "N": 7688,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 197,
+      "N": 7714,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 198,
+      "N": 7740,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 199,
+      "N": 7766,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 200,
+      "N": 7792,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 201,
+      "N": 7818,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 202,
+      "N": 7844,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 203,
+      "N": 7870,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 204,
+      "N": 7896,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 205,
+      "N": 7922,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 206,
+      "N": 7948,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 207,
+      "N": 7974,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 208,
+      "N": 8000,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 209,
+      "N": 8026,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 210,
+      "N": 8052,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 211,
+      "N": 8078,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 212,
+      "N": 8104,
+      "false_positives": 0,
+      "false_negatives": 0
+    },
+    {
+      "family": "D",
+      "k": 213,
+      "N": 8130,
+      "false_positives": 0,
+      "false_negatives": 0
+    }
+  ],
+  "boundaries": [
+    {
+      "family": "C",
+      "k": 41,
+      "A": 54,
+      "n": 42,
+      "actual_P": true
+    },
+    {
+      "family": "C",
+      "k": 54,
+      "A": 54,
+      "n": 54,
+      "actual_P": false
+    },
+    {
+      "family": "C",
+      "k": 55,
+      "A": 54,
+      "n": 54,
+      "actual_P": false
+    },
+    {
+      "family": "C",
+      "k": 56,
+      "A": 54,
+      "n": 54,
+      "actual_P": false
+    },
+    {
+      "family": "C",
+      "k": 57,
+      "A": 54,
+      "n": 54,
+      "actual_P": false
+    },
+    {
+      "family": "C",
+      "k": 57,
+      "A": 86,
+      "n": 58,
+      "actual_P": true
+    },
+    {
+      "family": "C",
+      "k": 79,
+      "A": 86,
+      "n": 492,
+      "actual_P": false
+    },
+    {
+      "family": "C",
+      "k": 80,
+      "A": 86,
+      "n": 167,
+      "actual_P": false
+    },
+    {
+      "family": "D",
+      "k": 169,
+      "A": 214,
+      "n": 170,
+      "actual_P": true
+    },
+    {
+      "family": "D",
+      "k": 214,
+      "A": 214,
+      "n": 214,
+      "actual_P": false
+    },
+    {
+      "family": "D",
+      "k": 215,
+      "A": 214,
+      "n": 214,
+      "actual_P": false
+    },
+    {
+      "family": "D",
+      "k": 168,
+      "A": 214,
+      "n": 169,
+      "actual_P": true
+    }
+  ],
+  "scans": [
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 2,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 3,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 4,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 5,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 9
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 6,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 7,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 8,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 9,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 10,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 11,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 12,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 13,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 53
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 14,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 15,
+      "m": 0,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 2,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 1
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 3,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 4,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 5,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 3
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 6,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 14
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 7,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 8,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 9,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 10,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 29
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 11,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 17
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 12,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 32
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 13,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 14,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 15,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 2,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 1
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 3,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 1
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 4,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 5,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 6,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 7,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 8,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 9,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 10,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 3
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 11,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 12,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 13,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 14,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/comparison/m0_m1_m2_k2_15_n10000_scan_results.csv",
+      "k": 15,
+      "m": 2,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 53
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 5,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 3
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 6,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 14
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 7,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 8,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 9,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 10,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 29
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 11,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 17
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 12,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 32
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 13,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 14,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 15,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 16,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 17,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 15
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 18,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 19,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 20,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 11
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 21,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 22,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 23,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 24,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 25,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 26,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 56
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 27,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 113
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 28,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 56
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 29,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 30,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 31,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 32,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 156
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 33,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 34,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 35,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 36,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 125
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 37,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 129
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 38,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 39,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 40,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 41,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 224
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 42,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 111
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 43,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 117
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 44,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 117
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 45,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 115
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 46,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 116
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 47,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 112
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 48,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 114
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 49,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 50,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 51,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 52,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 53,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 54,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 55,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 56,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 294
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 57,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 199
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 58,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 58
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 59,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 60,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 61,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 62,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 63,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 58
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 64,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 65,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 66,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 67,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 68,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 69,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 70,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 71,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 72,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 73,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 74,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 75,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 76,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 77,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 78,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 79,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 284
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 80,
+      "m": 1,
+      "N": 7736,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 81,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 82,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 83,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 84,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 85,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 86,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 87,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 87
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 88,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 88
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 89,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 90,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 90
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 91,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 91
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 92,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 86
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 93,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 94,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 95,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 96,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 97,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 98,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 99,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/exploratory/m1_k5_100_n200000_scan_results.csv",
+      "k": 100,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 81,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 82,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 83,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 84,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 85,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 86,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 87,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 87
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 88,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 88
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 89,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 90,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 90
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 91,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 91
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 92,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 86
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 93,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 94,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 95,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 96,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 97,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 98,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 99,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 100,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 101,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 199
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 102,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 201
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 103,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 203
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 104,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 365
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 105,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 105
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 106,
+      "m": 1,
+      "N": 6951,
+      "first_mismatch": null,
+      "full_PN_witness": 706
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 107,
+      "m": 1,
+      "N": 11174,
+      "first_mismatch": null,
+      "full_PN_witness": 211
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 108,
+      "m": 1,
+      "N": 6584,
+      "first_mismatch": null,
+      "full_PN_witness": 213
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 109,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 442
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 110,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 214
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 111,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 211
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 112,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 114
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 113,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 114,
+      "m": 1,
+      "N": 7684,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 115,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 102
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 116,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 117,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 118,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 119,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_81_120_scan_results.csv",
+      "k": 120,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 35,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 89
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 36,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 125
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 37,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 129
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 38,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 39,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 40,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 41,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 224
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 42,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 111
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 43,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 117
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 44,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 117
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 45,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 115
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 46,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 116
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 47,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 112
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 48,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 114
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 49,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 50,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 51,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 52,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 53,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 54,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 55,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": null
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 56,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 294
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 57,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 199
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 58,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 58
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 59,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 60,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 61,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 62,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 63,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 58
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 64,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 59
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 65,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 66,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 67,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 68,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 69,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 70,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 71,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 72,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 73,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 74,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 75,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 76,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 77,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 78,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 79,
+      "m": 1,
+      "N": 5000,
+      "first_mismatch": null,
+      "full_PN_witness": 284
+    },
+    {
+      "file": "data/deep_scan/m1_35_80_scan_results.csv",
+      "k": 80,
+      "m": 1,
+      "N": 7736,
+      "first_mismatch": null,
+      "full_PN_witness": 0
+    }
+  ],
+  "affine_files": [
+    {
+      "file": "summary.csv",
+      "text_equal": false
+    },
+    {
+      "file": "component_sizes.csv",
+      "text_equal": false
+    },
+    {
+      "file": "exact_affine_tracks.csv",
+      "text_equal": false
+    },
+    {
+      "file": "ANALYSIS.md",
+      "text_equal": false
+    },
+    {
+      "file": "selected_regions.csv",
+      "text_equal": false
+    },
+    {
+      "file": "track_only_validation.csv",
+      "text_equal": false
+    },
+    {
+      "file": "boundary_falsification.csv",
+      "text_equal": false
+    },
+    {
+      "file": "maximal_segments.csv",
+      "text_equal": false
+    },
+    {
+      "file": "residual_points.csv",
+      "text_equal": false
+    }
+  ],
+  "A_extra_parameter_pairs": 460
+}

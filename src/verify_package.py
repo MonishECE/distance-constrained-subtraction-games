@@ -19,10 +19,11 @@ def main():
     with tempfile.TemporaryDirectory() as td:
         temp=Path(td)
         shutil.copytree(root/'src',temp/'src',ignore=shutil.ignore_patterns('__pycache__'))
+        shutil.copytree(root/'methodology',temp/'methodology',ignore=shutil.ignore_patterns('__pycache__'))
         for command in [
             ['src/distance_subtraction_research.py','self-test'],
             ['src/affine_region_extractor.py','self-test'],
-            ['src/verify_theorems_ab.py'], ['src/verify_theorem_c.py'],
+            ['methodology/theorem_B/verify_theorems_ab.py'], ['methodology/theorem_C/verify_theorem_c.py'],
             ['src/full_state_analysis.py','certificates','--out','data/certificates/full_state_period_certificates_k58_78.csv']]:
             result=subprocess.run([sys.executable,*command],cwd=temp,capture_output=True,text=True)
             assert result.returncode==0, (command,result.stdout,result.stderr)
@@ -32,7 +33,7 @@ def main():
         for name,body in [('B','theorem_B'),('C','theorem_C')]:
             file=temp/'data/certificates'/('theorem_B_audit.csv' if name=='B' else 'theorem_C_certificates.csv')
             rows=list(csv.DictReader(file.open()))
-            tex=(root/'paper'/body/'body.tex').read_text()
+            tex=(root/'paper'/'theorems'/(body+'.tex')).read_text()
             for row in rows:
                 k=int(row['k']); p=int(row.get('period',row.get('candidate_period')))
                 numbers=[k,p]
@@ -47,7 +48,7 @@ def main():
                                if all(bits[n]==bits[(n+d)%p] for n in range(p)))
                     assert least==int(row['least_start_period']), ('C minimality',k)
         failures=list(csv.DictReader((temp/'data/certificates/theorem_C_boundary_counterexamples.csv').open()))
-        tex=(root/'paper/theorem_C/body.tex').read_text()
+        tex=(root/'paper'/'theorems'/'theorem_C.tex').read_text()
         for row in failures:
             numbers=[row['k'],row['A'],row['first_counterexample_n']]
             assert re.search(r'\s*&\s*'.join(numbers),tex), ('boundary table',row)
