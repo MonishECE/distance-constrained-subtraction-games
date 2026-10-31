@@ -74,8 +74,14 @@ def main():
     checks = {'theorem_C_fixed_k_certificates':len(proven),'parameters':[42,53],
               'boundary_counterexamples':len(boundary),
               'all_passed':True,
-              'uniform_symbolic_regime_theorem':'WORKING ON',
-              'infinite_A_hierarchy':'WORKING ON',
+              'universal_row_theorem':'PROVED',
+              'run_hierarchy':'PROVED (verified to n=1e7)',
+              'lower_boundary_mechanism':'PROVED',
+              'infinite_A_hierarchy':'OPEN uniformly; twelve intervals certified through j=13 (10323 pairs; see regime_hierarchy_summary.json and regime_hierarchy_j13_summary.json)',
+              'uniform_symbolic_regime_theorem':'OPEN',
+              'upper_endpoint_formula':'OPEN',
+              'certified_collapse_values':[6,8,30,118,470,1878,7510,30038],
+              'targeted_scans':'data/certificates/targeted_scans.json: A=1366 k in [342,937] and [1252,1365]; A=1878 k in [470,1876]; A=7510 k in [3754,7508] step 125; all fail',
               'certificate_csv_sha256':hashlib.sha256((base/'theorem_C_certificates.csv').read_bytes()).hexdigest(),
               'boundary_csv_sha256':hashlib.sha256((base/'theorem_C_boundary_counterexamples.csv').read_bytes()).hexdigest()}
     (base/'theorem_C_summary.json').write_text(json.dumps(checks,indent=2)+'\n',encoding='utf-8')

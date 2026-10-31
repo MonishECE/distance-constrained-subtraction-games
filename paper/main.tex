@@ -1,13 +1,13 @@
 \documentclass[11pt]{article}
 \input{shared/preamble.tex}
 \title{\textbf{Distance-Constrained Dynamic Subtraction Games}\\[0.4em]
-\large Interval Structure, Certified Affine Regimes, and a Working Conjecture}
+\large Interval Structure, Certified Affine Regimes, and a Run Hierarchy}
 \author{Monish Krishna Bandaru, Rithwik Krishna Gummadi, Santosh Krishna Reddy}
 \date{October 9, 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-We study an impartial take-away game where consecutive removals must differ by more than a fixed distance. We prove an interval classification of losing full-state rows and eventual P/N periodicity for fixed parameters. Using exact finite-window certificates and induction, we establish two finite collections of affine starting-position formulas: $42\le k\le53$ and $58\le k\le78$ for distance one. A general arithmetic obstruction explains why the $A=54$ three-residue period degenerates at $k=53$ and why no $A$-template can hold for $k\ge A$. We give counterexamples at adjacent parameters. A parameter-uniform explanation and a general hierarchy remain \emph{Open}. Each numerical claim is tied to a reproducible certificate; related literature is credited in the same article.
+We study an impartial take-away game where consecutive removals must differ by more than a fixed distance. We prove an interval classification of losing full-state rows, eventual periodicity for fixed parameters, and a universal row recurrence with a closed-form run hierarchy. Exact finite-window certificates and induction establish twelve parameter intervals through group $j=13$, covering $10323$ pairs. Adjacent counterexamples bound each contiguous interval. The new second-position interval is $15018\le k\le20025$ at $A=21846$, with upper-boundary failure at $n=83746$. A parameter-uniform proof and global exclusion of additional intervals remain \emph{Open}.
 \end{abstract}
 \tableofcontents
 \section{Research context, question, and method}
@@ -18,6 +18,6 @@ We followed this process: (i) model the full state and derive an exact Boolean r
 \input{theorem_B/body.tex}
 \input{theorem_C/body.tex}
 \section{Research conclusion and limitations}
-The interval theorem and general eventual periodicity are mathematical results independent of computation. Two exact finite-$k$ starting-position classifications are established by computer-assisted certificates and induction, not merely by long observed sequences. Theorem C supplies a universal necessary condition $k<A$ for any valid $A$-template and identifies the exact period-collapse mechanism at $k=A-1$. Its second family extends the previous data report to $k=53$, where the least starting period is only $54$ despite the larger displayed modulus $162$. These results offer a concrete arithmetic boundary explanation, but not a uniform symbolic reason for the emergence of $54$ and $86$ or the upper endpoint $78$. \emph{Open:} a closed-form full-state classification, a parameter-uniform proof, and any infinite sequence of $A$ values. Independent proof review and a broader priority literature review remain essential before a novelty claim.
+The universal row recurrence and infinite run hierarchy have symbolic proofs. Twelve finite parameter intervals are established by certificates and induction, with adjacent counterexamples and separately certified collapse cases. The $j=13$ extension adds $7740$ pairs to the earlier $2583$. These results do not prove a parameter-uniform regime theorem or exclude disconnected valid intervals. The upper-endpoint formula, the all-group genuine/non-genuine conjecture, and a broader originality review remain open.
 \input{shared/works_cited.tex}
 \end{document}

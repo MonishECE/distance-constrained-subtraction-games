@@ -1,0 +1,49 @@
+{
+  "scans": [
+    {
+      "A": 1366,
+      "k_first": 342,
+      "k_last": 937,
+      "step": 1,
+      "tested": 596,
+      "largest_first_failure_n": 938,
+      "at_k": 937,
+      "seconds": 5.3,
+      "note": "below the certified genuine interval"
+    },
+    {
+      "A": 1366,
+      "k_first": 1252,
+      "k_last": 1365,
+      "step": 1,
+      "tested": 114,
+      "largest_first_failure_n": 5452,
+      "at_k": 1361,
+      "seconds": 1.7,
+      "note": "above the certified genuine interval"
+    },
+    {
+      "A": 1878,
+      "k_first": 470,
+      "k_last": 1876,
+      "step": 1,
+      "tested": 1407,
+      "largest_first_failure_n": 5632,
+      "at_k": 1876,
+      "seconds": 22.4,
+      "note": "all k below the collapse-only k=A-1"
+    },
+    {
+      "A": 7510,
+      "k_first": 3754,
+      "k_last": 7508,
+      "step": 125,
+      "tested": 31,
+      "largest_first_failure_n": 22520,
+      "at_k": 7504,
+      "seconds": 2.7,
+      "note": "coarse scan of the plausible range"
+    }
+  ],
+  "all_failed_as_expected": true
+}

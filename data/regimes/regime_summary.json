@@ -1,0 +1,24 @@
+{
+  "regimes": [
+    {"j": 3, "position": 0, "A": 14, "k_min": 11, "k_max": 11, "count": 1},
+    {"j": 3, "position": 1, "A": 22, "k_min": 17, "k_max": 17, "count": 1},
+    {"j": 5, "position": 0, "A": 54, "k_min": 42, "k_max": 53, "count": 12},
+    {"j": 5, "position": 1, "A": 86, "k_min": 58, "k_max": 78, "count": 21},
+    {"j": 7, "position": 0, "A": 214, "k_min": 170, "k_max": 213, "count": 44},
+    {"j": 7, "position": 1, "A": 342, "k_min": 234, "k_max": 313, "count": 80},
+    {"j": 9, "position": 0, "A": 854, "k_min": 682, "k_max": 853, "count": 172},
+    {"j": 9, "position": 1, "A": 1366, "k_min": 938, "k_max": 1251, "count": 314},
+    {"j": 11, "position": 0, "A": 3414, "k_min": 2730, "k_max": 3413, "count": 684},
+    {"j": 11, "position": 1, "A": 5462, "k_min": 3754, "k_max": 5007, "count": 1254}
+  ],
+  "collapse_only": [
+    {"A": 6, "k": 5}, {"A": 8, "k": 7}, {"A": 30, "k": 29},
+    {"A": 118, "k": 117}, {"A": 470, "k": 469}, {"A": 1878, "k": 1877},
+    {"A": 7510, "k": 7509}
+  ],
+  "k_min_formula": "end of the preceding universal 1-run: (2^{j+2}-2)/3 for A_{j,0}, (11*2^{j-1}-2)/3 for A_{j,1}, j>=5",
+  "k_max_first_A": "A-1",
+  "k_max_second_A": "A-d_j with d_j=5,8,29,115,455 for j=3,5,7,9,11 (no closed form)",
+  "scan": "data/regimes/template_scan_big.csv",
+  "certificates": "data/certificates/regime_hierarchy_certificates.csv"
+}

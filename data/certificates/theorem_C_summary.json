@@ -6,8 +6,23 @@
   ],
   "boundary_counterexamples": 8,
   "all_passed": true,
-  "uniform_symbolic_regime_theorem": "WORKING ON",
-  "infinite_A_hierarchy": "WORKING ON",
+  "universal_row_theorem": "PROVED",
+  "run_hierarchy": "PROVED (verified to n=1e7)",
+  "lower_boundary_mechanism": "PROVED",
+  "infinite_A_hierarchy": "OPEN uniformly; twelve intervals certified through j=13 (10323 pairs; see regime_hierarchy_summary.json and regime_hierarchy_j13_summary.json)",
+  "uniform_symbolic_regime_theorem": "OPEN",
+  "upper_endpoint_formula": "OPEN",
+  "certified_collapse_values": [
+    6,
+    8,
+    30,
+    118,
+    470,
+    1878,
+    7510,
+    30038
+  ],
+  "targeted_scans": "data/certificates/targeted_scans.json: A=1366 k in [342,937] and [1252,1365]; A=1878 k in [470,1876]; A=7510 k in [3754,7508] step 125; all fail",
   "certificate_csv_sha256": "40f60c3d1af66d4cea02cc7fec4c07abbbdb7ac0c1db7e4230b13be81989f1d4",
   "boundary_csv_sha256": "d6ef6d8c1cf5de1f035ecee1f8223d76102fa4cc21efe5851c399299fdacb439"
 }
