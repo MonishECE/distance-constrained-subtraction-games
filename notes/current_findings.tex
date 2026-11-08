@@ -1,0 +1,916 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,array,enumitem}
+\usepackage{xcolor,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\allowdisplaybreaks
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Pset}{\mathcal{P}}
+\newcommand{\Nset}{\mathcal{N}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\statusproved}{\textbf{Status: proved.}}
+\newcommand{\statuscert}{\textbf{Status: certified by exact finite computation plus induction.}}
+\newcommand{\statusopen}{\textbf{Status: open.}}
+
+\title{Distance-Constrained Subtraction Games\\[4pt]
+\large Current Findings, the Governing Equations, and a Candidate Endpoint Law}
+\author{Research note for the repository\\
+\texttt{distance-constrained-subtraction-games}}
+\date{November 7, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note gives a self-contained breakdown of the current mathematical and computational findings for the impartial game in which consecutive removals from a heap must differ by more than a fixed distance. The proved core consists of an exact interval formula for the losing full-state rows, eventual periodicity for every fixed parameter pair, a universal binary recursion for the unrestricted game, and a closed-form hierarchy of maximal runs. On top of this core sit the residue templates and the certified regime intervals. The latest published data certify twelve parameter intervals through \(j=13\), covering \(10{,}323\) parameter pairs. We also report a new empirical observation: the upper deficits \(d_j=A_{j,1}-K_j\) for \(j\ge 7\) appear to obey a residue-dependent closed form
+\[
+d_j=\frac{2^{j+1}+\delta_j}{9},
+\qquad
+K_j=\frac{11\cdot 2^{j+1}+\varepsilon_j}{9},
+\]
+with \(\delta_j\in\{5,11,-1\}\) and \(\varepsilon_j\in\{1,-5,7\}\) determined by \(j\bmod 6\). The law reproduces every certified endpoint through \(j=13\) and new upper-endpoint probes at \(j=15,17,19,21,23\). It is stated here as a conjecture, not as a proved theorem.
+\end{abstract}
+
+\tableofcontents
+
+\section{Scope and status of this note}
+
+The repository contains three theorem families, exact certificate data, independent audits, and a recent \(j=13\) extension. This note consolidates those findings into one document and separates four levels of evidence:
+\begin{enumerate}[label=(\roman*)]
+\item symbolic proofs valid for all parameters in the stated range;
+\item computer-assisted proofs for fixed parameters, using exact finite windows plus an induction bridge;
+\item exact finite scans that establish boundary failures for a contiguous interval;
+\item empirical patterns and conjectures supported by the certified data but not yet derived.
+\end{enumerate}
+
+The new endpoint law in Section~\ref{sec:endpoint-law} belongs to level (iv). It is included because it is the first compact equation that reproduces the complete current deficit sequence and it makes falsifiable predictions for \(j\ge25\).
+
+The repository state summarized here is the merge commit that placed the theorem bodies in \texttt{paper/theorems/}, the per-theorem verification scripts and method notes in \texttt{methodology/}, and the independent audit in \texttt{audits/2026-10-12/}. The mathematical statements below are unchanged by that reorganization.
+
+\section{The game and its state recurrence}\label{sec:game}
+
+Fix integers \(k\ge1\) and \(m\ge0\). A position is a pair \((n,s)\), where \(n\ge0\) is the number of counters remaining and \(s\in\{1,\dots,k\}\) is the previous removal. A legal move removes \(r\) counters with
+\begin{equation}\label{eq:moves}
+1\le r\le\min(k,n),
+\qquad
+|r-s|>m.
+\end{equation}
+The first move has no previous-removal restriction. The resulting state is \((n-r,r)\). Normal play applies: a player with no legal move loses. Write \(\Pset\) and \(\Nset\) for losing and winning positions. The Sprague--Grundy framework supplies the standard normal-play background \cite{sprague1935,grundy1939,winningways2001}; the repetition-free variant in \cite{gurvich2012} is an adjacent literature thread, not the source of the present formulas.
+
+Define the \emph{P-state row} and the set of \emph{P-reaching removals} by
+\begin{align}
+Q_n&=\{s\in\{1,\dots,k\}:(n,s)\text{ is a }\Pset\text{-position}\},\label{eq:Qn}\\
+A_n&=\{r:1\le r\le\min(k,n),\; r\in Q_{n-r}\}.\label{eq:An}
+\end{align}
+The terminal convention is
+\begin{equation}\label{eq:Q0}
+Q_0=\{1,\dots,k\},
+\end{equation}
+because from an empty heap no move is legal. The unrestricted starting position with \(n\) counters is a \(\Pset\)-position exactly when
+\begin{equation}\label{eq:start}
+A_n=\varnothing.
+\end{equation}
+
+\begin{remark}[Why the state must remember \(s\)]
+The legality of \(r\) depends on the previous removal \(s\), so the heap size \(n\) alone is not a sufficient state. The row \(Q_n\) is the compressed description of all previous removals that make \((n,s)\) losing.
+\end{remark}
+
+\section{Theorem A: exact interval geometry}\label{sec:A}
+
+The first structural result says that every row is empty, full, or a single interval.
+
+\begin{theorem}[Exact interval theorem]\label{thm:A}
+For every \(n\ge0\), if \(A_n=\varnothing\), then
+\begin{equation}\label{eq:Afull}
+Q_n=\{1,\dots,k\}.
+\end{equation}
+Otherwise
+\begin{equation}\label{eq:Ainterval}
+\boxed{
+Q_n=
+\bigl[\max\{1,\max A_n-m\},\;
+\min\{k,\min A_n+m\}\bigr]\cap\mathbb Z.
+}
+\end{equation}
+An interval whose lower endpoint exceeds its upper endpoint is empty. Every non-full row has at most \(2m+1\) entries.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+A move \(r\) from \((n,s)\) reaches a losing state exactly when \(r\in A_n\) and \(|r-s|>m\). Hence \((n,s)\) is losing precisely when \emph{every} \(r\in A_n\) violates the move condition, i.e.
+\[
+|r-s|\le m
+\qquad\text{for all }r\in A_n.
+\]
+If \(A_n=\varnothing\), this holds for every \(s\). Otherwise the inequalities \(r-m\le s\le r+m\) intersect to
+\[
+\max A_n-m\le s\le \min A_n+m,
+\]
+clipped to \(1\le s\le k\). The length is at most \(2m+1\).
+\end{proof}
+
+Two consequences are central.
+
+\begin{lemma}[Finite memory]\label{lem:memory}
+For fixed \(k,m\), the row \(Q_n\) is determined by \(Q_{n-1},\dots,Q_{n-k}\) whenever \(n\ge k\).
+\end{lemma}
+
+\begin{proof}
+For each \(1\le r\le k\), membership \(r\in Q_{n-r}\) determines whether \(r\in A_n\). Theorem~\ref{thm:A} then determines \(Q_n\).
+\end{proof}
+
+\begin{theorem}[Eventual periodicity]\label{thm:period}
+For every fixed \(k\ge1\) and \(m\ge0\), the row sequence \((Q_n)_{n\ge0}\) is eventually periodic. Consequently the unrestricted starting-position P/N sequence is eventually periodic.
+\end{theorem}
+
+\begin{proof}
+Each \(Q_n\) is a subset of a \(k\)-element set, so there are at most \(2^k\) possible rows. Consider the windows
+\[
+(Q_n,Q_{n+1},\dots,Q_{n+k-1}).
+\]
+There are at most \(2^{k^2}\) such windows. By Lemma~\ref{lem:memory}, the successor window is a deterministic function of the current window once \(n\ge k\). Pigeonhole gives two equal windows, and induction gives all later equalities. The starting predicate \(A_n=\varnothing\) depends on the preceding \(k\) rows, so it inherits the period.
+\end{proof}
+
+Theorem~\ref{thm:A} is the engine behind every computation in the repository. The exact interval recurrence is what makes the large certificate runs feasible.
+
+\section{Theorem B: the \(A=86\) affine regime}\label{sec:B}
+
+The next result is a fixed-parameter affine regime for \(m=1\).
+
+\begin{theorem}[The \(A=86\) regime]\label{thm:B}
+For every integer \(58\le k\le78\), the unrestricted starting position of \(D(k,1)\) with \(n\) counters is losing precisely when
+\begin{equation}\label{eq:B}
+\boxed{
+n\bmod(2k+88)\in\{0,\,86,\,k+87\}.
+}
+\end{equation}
+The least positive period of this starting P/N sequence is \(2k+88\).
+\end{theorem}
+
+The proof is a template for all later regimes. It uses two lemmas.
+
+\begin{lemma}[Window repetition]\label{lem:window}
+Fix \(k,m\). Suppose there exist integers \(p\ge1\) and \(t\ge0\) such that
+\[
+Q_{t+i}=Q_{t+p+i}
+\qquad\text{for every }0\le i<k.
+\]
+Then \(Q_n=Q_{n+p}\) for all \(n\ge t\).
+\end{lemma}
+
+\begin{proof}
+The \(k\) given equalities are the induction base. For \(n\ge t+k\), each row used in \(A_n\) is \(Q_{n-r}\) with \(1\le r\le k\). The corresponding row for \(A_{n+p}\) is \(Q_{n+p-r}\), which agrees by induction. Theorem~\ref{thm:A} then gives \(Q_n=Q_{n+p}\).
+\end{proof}
+
+\begin{lemma}[Starting-position bridge]\label{lem:bridge}
+Under Lemma~\ref{lem:window}, the starting P/N sequence has period \(p\) for all \(n\ge t+k\). A proposed \(p\)-periodic formula is valid for every \(n\ge0\) if it matches the exact starting outcome for
+\[
+0\le n\le t+k+p-1.
+\]
+\end{lemma}
+
+\begin{proof}
+For \(n\ge t+k\), all removals \(1\le r\le k\) are available and the child rows agree, so \(A_n=A_{n+p}\). The displayed finite range contains the prefix and one complete period beyond the start of the induction.
+\end{proof}
+
+For Theorem~\ref{thm:B}, the script computes the exact rows, finds a window start \(t\), checks the template through the bridge, and verifies the least period by exhausting cyclic shifts. The final minimality step is independent of the solver: a nonzero translation preserving a three-element residue set must have order three, so the residues would have to be equally spaced. For \(58\le k\le78\), the proposed spacing \(86\) is incompatible with \(p/3=(2k+88)/3<86\), so the displayed period is least.
+
+\section{Theorem C: universal rows and the run hierarchy}\label{sec:C}
+
+The finite parameter \(k\) can be removed in a \emph{universal game} \(D(\infty,1)\), where every removal \(1\le r\le n\) is available subject to the same distance restriction. For \(n\le k\), the finite game's row is the universal row restricted to \(1\le s\le k\).
+
+Let \(Q_n\) now denote the universal row, and define the binary sequence
+\begin{equation}\label{eq:rn}
+r(n)=
+\begin{cases}
+1,&Q_n\ne\varnothing,\\
+0,&Q_n=\varnothing.
+\end{cases}
+\end{equation}
+
+\begin{theorem}[Universal row theorem]\label{thm:universal}
+In the universal game, for every \(n\ge5\),
+\begin{equation}\label{eq:universal-row}
+Q_n=
+\begin{cases}
+[n-1,\,n+1],&r(n)=1,\\
+\varnothing,&r(n)=0.
+\end{cases}
+\end{equation}
+Moreover, for every \(m\ge5\),
+\begin{equation}\label{eq:recursion}
+\boxed{
+r(2m)=1-r(m),
+\qquad
+r(2m+1)=1-\max\{r(m),r(m+1)\}.
+}
+\end{equation}
+The base values are
+\[
+r(0),r(1),\dots,r(9)=1,1,1,1,1,0,1,0,1,1.
+\]
+\end{theorem}
+
+The proof is by strong induction. The key observation is that a removal \(r\) belongs to \(A_n\) exactly when \(r\in Q_{n-r}\). For \(n-r\ge5\), the induction hypothesis forces \(r\) to be one of the two midpoint values \(\lfloor n/2\rfloor,\lceil n/2\rceil\). The removal \(r=n\) is always present because the terminal state is losing. The parity split then gives \eqref{eq:recursion}.
+
+\subsection{Closed-form maximal runs}
+
+The binary sequence has a completely explicit run structure.
+
+\begin{corollary}[Run hierarchy]\label{cor:runs}
+The maximal \(1\)-runs of \(r\) are exactly the following:
+\begin{itemize}
+\item the three initial runs \([0,4]\), \([6,6]\), \([8,10]\);
+\item for every odd \(j\ge3\) and \(\varepsilon\in\{0,1,2\}\), the interval
+\[
+\bigl[G_{j,\varepsilon},\;G_{j,\varepsilon}+L_{j,\varepsilon}-1\bigr],
+\]
+where
+\begin{align}
+G_{j,0}&=\frac{2+5\cdot2^j}{3},&
+L_{j,0}&=\frac{2^{j-1}-1}{3},\label{eq:G0}\\
+G_{j,1}&=\frac{2+8\cdot2^j}{3},&
+L_{j,1}&=\frac{2^{j+1}-1}{3},\label{eq:G1}\\
+G_{j,2}&=\frac{2+11\cdot2^j}{3},&
+L_{j,2}&=\frac{5\cdot2^j-1}{3}.\label{eq:G2}
+\end{align}
+\end{itemize}
+The intervening \(0\)-run lengths, after the first, second, and third \(1\)-run of group \(j\), are
+\begin{equation}\label{eq:gaps}
+\frac{5\cdot2^{j-1}+1}{3},
+\qquad
+\frac{2^j+1}{3},
+\qquad
+\frac{4\cdot2^j+1}{3}.
+\end{equation}
+\end{corollary}
+
+The proof uses a doubling lemma: if \([u,v]\) is a maximal \(0\)-run with \(u\ge6\), then \([2u,2v]\) is a maximal \(1\)-run. Conversely, every maximal \(1\)-run above \(10\) is the double of a maximal \(0\)-run. The three gaps in \eqref{eq:gaps} map to the third run of group \(j\) and the first two runs of group \(j+2\). The base cases are checked directly.
+
+\begin{table}[h]
+\centering
+\small
+\caption{The first runs of the universal sequence.}
+\label{tab:runs}
+\begin{tabular}{rrrr}
+\toprule
+\(j\) & \([G_{j,0},G_{j,0}+L_{j,0}-1]\) & \([G_{j,1},\dots]\) & \([G_{j,2},\dots]\)\\
+\midrule
+3 & \([14,14]\) & \([22,26]\) & \([30,42]\)\\
+5 & \([54,58]\) & \([86,106]\) & \([118,170]\)\\
+7 & \([214,234]\) & \([342,426]\) & \([470,682]\)\\
+9 & \([854,938]\) & \([1366,1706]\) & \([1878,2730]\)\\
+11 & \([3414,3754]\) & \([5462,6826]\) & \([7510,10922]\)\\
+13 & \([13654,15018]\) & \([21846,27306]\) & \([30038,43690]\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The recursion \eqref{eq:recursion} was checked against the exact solver through \(n=20{,}000\), and the run formulas were checked through \(n=10^7\) in the earlier parameter range.
+
+\section{The residue template}\label{sec:template}
+
+The regime results concern the empirical template
+\begin{equation}\label{eq:template}
+\boxed{
+\mathcal T(k,A):\qquad
+P_0(n)\iff n\bmod p\in R,
+\qquad
+p=2k+A+2,\quad
+R=\{0,A,k+A+1\},
+}
+\end{equation}
+where \(P_0(n)\) means that the unrestricted starting position with \(n\) counters is losing.
+
+Two analytic facts constrain every valid template.
+
+\begin{proposition}[Upper bound on \(A\)]\label{prop:upper}
+If \(\mathcal T(k,A)\) holds for \(D(k,1)\), then necessarily
+\begin{equation}\label{eq:kA}
+k<A.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The template declares \(n=A\) losing because \(A\in R\). If \(k\ge A\), then removing exactly \(A\) counters is a legal first move from \(n=A\) and leaves the empty heap, so the first player wins. Contradiction.
+\end{proof}
+
+\begin{proposition}[Collapse of the three-residue template]\label{prop:collapse}
+Let \(p=2k+A+2\) and \(R=\{0,A,k+A+1\}\pmod p\) with \(k,A\ge1\). The binary \(p\)-periodic indicator of \(R\) has a smaller positive period if and only if
+\begin{equation}\label{eq:collapse}
+k=A-1.
+\end{equation}
+In that case
+\[
+p=3A,\qquad R=\{0,A,2A\},
+\]
+and the least positive period is \(A\).
+\end{proposition}
+
+\begin{proof}
+The residues satisfy \(0<A<k+A+1<p\), so there are exactly three. A smaller period would give a nonzero translation of \(\mathbb Z/p\mathbb Z\) preserving \(R\). Every orbit of a fixed translation has equal size, which must divide \(|R|=3\). A nonzero translation has no fixed point, so the orbit size is three and the invariant set is \(\{0,p/3,2p/3\}\). Hence \(A=p/3\), equivalently \(3A=2k+A+2\), or \(k=A-1\). Conversely, if \(k=A-1\), then \(p=3A\) and membership depends only on divisibility by \(A\), whose least period is \(A\).
+\end{proof}
+
+\section{The certified regime hierarchy}\label{sec:hierarchy}
+
+For odd \(j\ge3\), define the three universal run starts
+\begin{equation}\label{eq:Avalues}
+A_{j,0}=\frac{2+5\cdot2^j}{3},
+\qquad
+A_{j,1}=\frac{2+8\cdot2^j}{3},
+\qquad
+A_{j,2}=\frac{2+11\cdot2^j}{3}.
+\end{equation}
+These are precisely \(G_{j,0},G_{j,1},G_{j,2}\).
+
+\begin{theorem}[Certified hierarchy through \(j=13\)]\label{thm:hierarchy}
+For \(j\in\{5,7,9,11,13\}\):
+\begin{enumerate}[label=(\alph*)]
+\item \(\mathcal T(k,A_{j,0})\) holds throughout
+\begin{equation}\label{eq:kmin0}
+\frac{2^{j+2}-2}{3}\le k\le A_{j,0}-1;
+\end{equation}
+\item \(\mathcal T(k,A_{j,1})\) holds throughout
+\begin{equation}\label{eq:kmin1}
+\frac{11\cdot2^{j-1}-2}{3}\le k\le K_j,
+\end{equation}
+where
+\[
+K_5=78,\quad K_7=313,\quad K_9=1251,\quad K_{11}=5007,\quad K_{13}=20025;
+\]
+\item the collapse case \(\mathcal T(A_{j,2}-1,A_{j,2})\) holds, with least starting period \(A_{j,2}\).
+\end{enumerate}
+The small group \(j=3\) has the certified cases \(A=14\) at \(k=11\), \(A=22\) at \(k=17\), and the collapse \(A=30\) at \(k=29\). Every parameter in the twelve listed intervals is certified for all \(n\) by finite windows plus induction. Both adjacent parameters fail for each interval, which establishes maximal contiguous intervals, not global uniqueness.
+\end{theorem}
+
+The proof is the window-and-bridge pipeline of Lemmas~\ref{lem:window} and~\ref{lem:bridge}, applied independently to every \((k,A)\) pair. The exact interval recurrence computes the rows; the script finds a repeated \(k\)-row window with displacement \(p=2k+A+2\), checks the template through the complete bridge \(t+k+p-1\), and verifies row equality on the computed range. The certificates are recorded in
+\[
+\texttt{data/certificates/regime\_hierarchy\_certificates.csv}
+\quad\text{and}\quad
+\texttt{data/certificates/regime\_hierarchy\_j13.csv}.
+\]
+The original hierarchy contributes \(2{,}583\) pairs and the \(j=13\) extension contributes \(7{,}740\), for \(10{,}323\) pairs in total.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Certified intervals through \(j=13\). The value \(A_{j,2}\) is certified at the collapse parameter \(k=A_{j,2}-1\); this does not assert that all other \(k\) fail.}
+\label{tab:hierarchy}
+\begin{tabular}{rrrrrrr}
+\toprule
+\(j\) & \(A_{j,0}\) & \(k\)-interval & \(A_{j,1}\) & \(k\)-interval & \(A_{j,2}\) & \(d_j\)\\
+\midrule
+3 & 14 & \(11\)--\(11\) & 22 & \(17\)--\(17\) & 30 & 5\\
+5 & 54 & \(42\)--\(53\) & 86 & \(58\)--\(78\) & 118 & 8\\
+7 & 214 & \(170\)--\(213\) & 342 & \(234\)--\(313\) & 470 & 29\\
+9 & 854 & \(682\)--\(853\) & 1366 & \(938\)--\(1251\) & 1878 & 115\\
+11 & 3414 & \(2730\)--\(3413\) & 5462 & \(3754\)--\(5007\) & 7510 & 455\\
+13 & 13654 & \(10922\)--\(13653\) & 21846 & \(15018\)--\(20025\) & 30038 & 1821\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \(j=13\) extension is the main content of the latest research commit. It adds the two intervals
+\[
+A=13{,}654,\quad k=10{,}922,\dots,13{,}653
+\qquad\text{and}\qquad
+A=21{,}846,\quad k=15{,}018,\dots,20{,}025,
+\]
+plus the certified collapse \(A=30{,}038\) at \(k=30{,}037\). The new upper deficit is
+\[
+d_{13}=A_{13,1}-K_{13}=21{,}846-20{,}025=1{,}821.
+\]
+The adjacent failure above the interval is at
+\[
+k=20{,}026,\qquad n=83{,}746.
+\]
+The complete list of certified collapse-only values is
+\[
+A\in\{6,8,30,118,470,1878,7510,30038\},
+\]
+each certified at \(k=A-1\).
+
+\section{Boundary behavior and deficits}\label{sec:boundaries}
+
+For each certified interval, the immediate neighbors fail. Table~\ref{tab:boundaries} records the first counterexample.
+
+\begin{table}[h]
+\centering
+\small
+\caption{First counterexamples at the regime boundaries. ``Predicted/actual'' refers to whether the unrestricted start is a \(\Pset\)-position.}
+\label{tab:boundaries}
+\begin{tabular}{rrrrrr}
+\toprule
+\(A\) & \(k_{\min}-1\) & first \(n\) & \(k_{\max}+1\) & first \(n\) & predicted/actual\\
+\midrule
+54 & 41 & 42 & 54 & 54 & P/N\\
+86 & 57 & 58 & 79 & 492 & P/N\\
+214 & 169 & 170 & 214 & 214 & P/N\\
+342 & 233 & 234 & 314 & 1314 & P/N\\
+854 & 681 & 682 & 854 & 854 & P/N\\
+1366 & 937 & 938 & 1252 & 5238 & P/N\\
+3414 & 2729 & 2730 & 3414 & 3414 & P/N\\
+5462 & 3753 & 3754 & 5008 & 20942 & P/N\\
+13654 & 10921 & 10922 & 13654 & 13654 & P/N\\
+21846 & 15017 & 15018 & 20026 & 83746 & P/N\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The lower boundary has a general explanation.
+
+\begin{proposition}[Lower boundary mechanism]\label{prop:lower}
+Let \(e\ge10\) be an even right endpoint of a maximal \(1\)-run of the universal sequence, with \(r(e/2)=0\). Then for every \(A>e\), the template \(\mathcal T(e-1,A)\) fails at \(n=e\): it predicts an \(\Nset\)-position, but \(e\) is a \(\Pset\)-position.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+In \(D(e-1,1)\), rows below \(e\) are universal rows restricted to previous removals at most \(e-1\), and the removal \(r=e\) is illegal. A removal \(r<e\) belongs to \(A_e\) exactly when \(r\in Q_{e-r}\). If \(e-r\ge5\), the universal row theorem forces \(|2r-e|\le1\); if \(1\le e-r\le4\), then \(r\ge e-4\ge6\) while those small rows lie in \([1,4]\). Since \(e\) is even and \(Q_{e/2}=\varnothing\), we get \(A_e=\varnothing\), so \(e\) is losing. On the other hand \(e\bmod p=e\) with \(p=2(e-1)+A+2>e\) and \(e\notin\{0,A,e+A\}\), so the template predicts winning.
+\end{proof}
+
+The upper boundary is more subtle. For \(j\in\{7,9,11,13\}\), the first counterexample at \(k=K_j+1\) occurs at
+\begin{equation}\label{eq:upperfail}
+n=p+A_{j,1},
+\qquad
+p=2(K_j+1)+A_{j,1}+2.
+\end{equation}
+For example, at \(j=13\) this gives
+\[
+p=2\cdot20{,}026+21{,}846+2=61{,}900,
+\qquad
+n=61{,}900+21{,}846=83{,}746.
+\]
+The cases \(j=3\) and \(j=5\) have different failure modes: \(n=A+k+1\) for \(j=3\), and \(n=2p\) for \(j=5\).
+
+Define the \emph{upper deficit}
+\begin{equation}\label{eq:deficit}
+d_j=A_{j,1}-K_j.
+\end{equation}
+The certified values are
+\begin{equation}\label{eq:dvalues}
+d_3=5,\quad d_5=8,\quad d_7=29,\quad d_9=115,\quad d_{11}=455,\quad d_{13}=1{,}821.
+\end{equation}
+Until now no closed form for \(d_j\) or \(K_j\) was known.
+
+\section{Equation discovery: a candidate closed form for the upper endpoint}\label{sec:endpoint-law}
+
+\subsection{The observed data}
+
+Write the odd index as \(j=2m+3\). The certified endpoints and deficits are:
+
+\begin{table}[h]
+\centering
+\small
+\caption{Verified upper endpoints and deficits. Rows \(j\le13\) are published certificates; \(j=15,17,19,21,23\) are new upper-endpoint probes.}
+\label{tab:deficits}
+\begin{tabular}{rrrrr}
+\toprule
+\(j\) & \(A_{j,1}\) & \(K_j\) & \(d_j=A_{j,1}-K_j\) & \(11\cdot2^{j+1}\)\\
+\midrule
+3 & 22 & 17 & 5 & 176\\
+5 & 86 & 78 & 8 & 704\\
+7 & 342 & 313 & 29 & 2{,}816\\
+9 & 1{,}366 & 1{,}251 & 115 & 11{,}264\\
+11 & 5{,}462 & 5{,}007 & 455 & 45{,}056\\
+13 & 21{,}846 & 20{,}025 & 1{,}821 & 180{,}224\\
+15 & 87{,}382 & 80{,}099 & 7{,}283 & 720{,}896\\
+17 & 349{,}526 & 320{,}399 & 29{,}127 & 2{,}883{,}584\\
+19 & 1{,}398{,}102 & 1{,}281{,}593 & 116{,}509 & 11{,}534{,}336\\
+21 & 5{,}592{,}406 & 5{,}126{,}371 & 466{,}035 & 46{,}137{,}344\\
+23 & 22{,}369{,}622 & 20{,}505{,}487 & 1{,}864{,}135 & 184{,}549{,}376\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The deficits grow like \(2^{j+1}/9\), but the exact values carry a periodic correction. Compute the residue of \(2^{j+1}\) modulo \(9\). Since \(2^6\equiv1\pmod9\), the residue depends on \(j\bmod6\). For odd \(j\ge7\):
+\[
+\begin{array}{c|ccc}
+j\bmod6 & 1 & 3 & 5\\ \hline
+2^{j+1}\bmod9 & 4 & 7 & 1
+\end{array}
+\]
+To make \(2^{j+1}+\delta_j\) divisible by \(9\) and reproduce the certified deficits, the selected corrections are
+\[
+\delta_j=
+\begin{cases}
+5,&j\equiv1\pmod6,\\
+11,&j\equiv3\pmod6,\\
+-1,&j\equiv5\pmod6.
+\end{cases}
+\]
+This gives the candidate
+\begin{equation}\label{eq:dlaw}
+\boxed{
+d_j=\frac{2^{j+1}+\delta_j}{9},
+\qquad j\ge7\text{ odd}.
+}
+\end{equation}
+A compact equivalent is
+\begin{equation}\label{eq:dfloor}
+d_j=
+\left\lfloor\frac{2^{j+1}+11}{9}\right\rfloor
+-\ind_{\{j\equiv5\pmod6\}},
+\qquad j\ge7.
+\end{equation}
+Equivalently, since \(A_{j,1}=(2+2^{j+3})/3\),
+\begin{equation}\label{eq:Klaw}
+\boxed{
+K_j=A_{j,1}-d_j
+=
+\begin{cases}
+\dfrac{11\cdot2^{j+1}+1}{9},&j\equiv1\pmod6,\\[6pt]
+\dfrac{11\cdot2^{j+1}-5}{9},&j\equiv3\pmod6,\\[6pt]
+\dfrac{11\cdot2^{j+1}+7}{9},&j\equiv5\pmod6.
+\end{cases}
+}
+\end{equation}
+A compact equivalent is
+\begin{equation}\label{eq:Kceil}
+K_j=
+\left\lceil\frac{11\cdot2^{j+1}}{9}\right\rceil
+-\ind_{\{j\equiv3\pmod6\}},
+\qquad j\ge7.
+\end{equation}
+Equivalently, the law is the two-step recurrence
+\begin{equation}\label{eq:recurrence}
+d_{j+2}=4d_j+c_j,
+\qquad
+K_{j+2}=4K_j-2-c_j,
+\qquad
+c_j=
+\begin{cases}
+-1,&j\equiv1\pmod6,\\
+-5,&j\equiv3\pmod6,\\
+1,&j\equiv5\pmod6,
+\end{cases}
+\end{equation}
+with bases \(d_7=29\), \(d_9=115\), \(d_{11}=455\). This form makes the scaling
+\(d_{j+2}\approx4d_j\) explicit and is the natural target for an inductive proof.
+
+\subsection{Validation against the certified data}
+
+Table~\ref{tab:validation} checks \eqref{eq:dlaw} and \eqref{eq:Klaw} against every published and probed endpoint.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Validation of the candidate endpoint law. The \(j=3,5\) rows are outside the claimed range; they are shown to document the exceptions.}
+\label{tab:validation}
+\begin{tabular}{rrrrrr}
+\toprule
+\(j\) & \(d_j\) actual & \(d_j\) formula & \(K_j\) actual & \(K_j\) formula & match\\
+\midrule
+3 & 5 & \(3\) & 17 & \(19\) & no (exception)\\
+5 & 8 & \(7\) & 78 & \(79\) & no (exception)\\
+7 & 29 & \(29\) & 313 & \(313\) & yes\\
+9 & 115 & \(115\) & 1{,}251 & \(1{,}251\) & yes\\
+11 & 455 & \(455\) & 5{,}007 & \(5{,}007\) & yes\\
+13 & 1{,}821 & \(1{,}821\) & 20{,}025 & \(20{,}025\) & yes\\
+15 & 7{,}283 & \(7{,}283\) & 80{,}099 & \(80{,}099\) & yes (probe)\\
+17 & 29{,}127 & \(29{,}127\) & 320{,}399 & \(320{,}399\) & yes (probe)\\
+19 & 116{,}509 & \(116{,}509\) & 1{,}281{,}593 & \(1{,}281{,}593\) & yes (probe)\\
+21 & 466{,}035 & \(466{,}035\) & 5{,}126{,}371 & \(5{,}126{,}371\) & yes (probe)\\
+23 & 1{,}864{,}135 & \(1{,}864{,}135\) & 20{,}505{,}487 & \(20{,}505{,}487\) & yes (probe)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{New probes at \(j=15,17,19,21,23\)}
+
+The law predicts a new regime at
+\[
+j=15,\qquad
+A_{15,1}=\frac{2+8\cdot2^{15}}{3}=87{,}382.
+\]
+Formula \eqref{eq:kmin1} gives
+\[
+k_{\min}=\frac{11\cdot2^{14}-2}{3}=60{,}074,
+\]
+and \eqref{eq:Klaw} predicts
+\[
+K_{15}=\frac{11\cdot2^{16}-5}{9}=80{,}099,
+\qquad
+d_{15}=87{,}382-80{,}099=7{,}283.
+\]
+A direct exact run confirms the endpoint:
+\begin{itemize}
+\item the certifier accepts \((k,A)=(80{,}099,87{,}382)\) with period \(p=247{,}582\), window start \(t=0\), bridge \(327{,}680\), and least start period \(p\);
+\item the falsifier rejects \(k=80{,}100\) at
+\[
+n=2\cdot80{,}100+87{,}382+2+87{,}382=334{,}966,
+\]
+exactly the upper-failure pattern \eqref{eq:upperfail};
+\item the lower endpoint \(k=60{,}074\) is accepted, and \(k=60{,}073\) fails at \(n=60{,}074\), exactly as Proposition~\ref{prop:lower} predicts.
+\end{itemize}
+This is a new data point beyond the published \(j\le13\) range and it agrees with the candidate law. It does not yet certify every \(k\) in the interval \(60{,}074\le k\le80{,}099\); only the endpoints have been checked. A full \(j=15\) interval certificate would require certifying all \(20{,}026\) pairs.
+
+The next group gives a second independent check. For \(j=17\),
+\[
+A_{17,1}=\frac{2+8\cdot2^{17}}{3}=349{,}526,
+\qquad
+k_{\min}=\frac{11\cdot2^{16}-2}{3}=240{,}298,
+\]
+and the endpoint law predicts
+\[
+K_{17}=\frac{11\cdot2^{18}+7}{9}=320{,}399,
+\qquad
+d_{17}=349{,}526-320{,}399=29{,}127.
+\]
+A direct exact run at \(k=320{,}399\) gives period \(p=990{,}326\), window start \(t=0\), and bridge \(1{,}310{,}724\); the \(k\)-row window repeats, the template matches through the bridge, and the least-period check passes. The adjacent parameter \(k=320{,}400\) fails first at
+\[
+n=2\cdot320{,}400+349{,}526+2+349{,}526=1{,}339{,}854=p+A_{17,1},
+\]
+again the upper-failure pattern \eqref{eq:upperfail}. The lower endpoint \(k=240{,}298\) matches the template through the first bridge, but the \(t=0\) window does not repeat and the certifier's wider window search timed out; it is not certified. As with \(j=15\), this certifies the upper endpoint, not the whole interval.
+
+The next group is the first case where both endpoints were certified. For \(j=19\),
+\[
+A_{19,1}=1{,}398{,}102,\quad
+k_{\min}=961{,}194,\quad
+K_{19}=1{,}281{,}593,\quad
+d_{19}=116{,}509.
+\]
+At the lower endpoint the repeated window starts at \(t=961{,}194\) with period \(p=3{,}320{,}492\) and bridge \(5{,}242{,}879\); the template, least-period, and row-equality checks pass, and \(k=961{,}193\) fails at \(n=961{,}194\). At the upper endpoint the window starts at \(t=0\) with period \(p=3{,}961{,}290\) and bridge \(5{,}242{,}882\); the template and least-period checks pass, and \(k=1{,}281{,}594\) fails at
+\[
+n=2\cdot1{,}281{,}594+1{,}398{,}102+2+1{,}398{,}102=5{,}359{,}394=p+A_{19,1}.
+\]
+This is again the upper-failure pattern \eqref{eq:upperfail}.
+
+For \(j=21\),
+\[
+A_{21,1}=5{,}592{,}406,\quad
+k_{\min}=3{,}844{,}778,\quad
+K_{21}=5{,}126{,}371,\quad
+d_{21}=466{,}035.
+\]
+The upper endpoint has period \(p=15{,}845{,}150\), window start \(t=0\), and bridge \(20{,}971{,}520\); the template and least-period checks pass. The adjacent parameter \(k=5{,}126{,}372\) fails first at
+\[
+n=2\cdot5{,}126{,}372+5{,}592{,}406+2+5{,}592{,}406=21{,}437{,}558=p+A_{21,1}.
+\]
+The lower endpoint of the \(j=21\) interval has not been certified.
+
+For \(j=23\),
+\[
+A_{23,1}=22{,}369{,}622,\quad
+k_{\min}=15{,}379{,}114,\quad
+K_{23}=20{,}505{,}487,\quad
+d_{23}=1{,}864{,}135.
+\]
+The upper endpoint has period \(p=63{,}380{,}598\), window start \(t=0\), and bridge \(83{,}886{,}084\); the template and least-period checks pass. The adjacent parameter \(k=20{,}505{,}488\) fails first at
+\[
+n=2\cdot20{,}505{,}488+22{,}369{,}622+2+22{,}369{,}622=85{,}750{,}222=p+A_{23,1}.
+\]
+The lower endpoint of the \(j=23\) interval has not been certified.
+
+\subsection{What the law does and does not say}
+
+The formula is falsifiable and makes predictions for every odd \(j\ge7\). The next unverified case is
+\[
+j=25:\quad
+A_{25,1}=89{,}478{,}486,\quad
+K_{25}=82{,}021{,}945,\quad
+d_{25}=7{,}456{,}541.
+\]
+This prediction has not been verified computationally. The formula is therefore stated as a conjecture:
+\begin{conjecture}[Endpoint law]\label{conj:endpoint}
+For every odd \(j\ge7\), the interval of validity of \(\mathcal T(k,A_{j,1})\) is
+\[
+\frac{11\cdot2^{j-1}-2}{3}\le k\le K_j,
+\]
+with \(K_j\) given by \eqref{eq:Klaw}. Equivalently, the upper deficit is \eqref{eq:dlaw}.
+\end{conjecture}
+
+Three cautions are important.
+\begin{enumerate}[label=(\arabic*)]
+\item The law is inferred from nine consecutive verified upper endpoints \(j=7,9,11,13,15,17,19,21,23\). A periodic pattern of period three in \(j\) is plausible because the residue \(2^{j+1}\bmod9\) has period six, but a nine-point fit is not a proof.
+\item The cases \(j=3\) and \(j=5\) are genuine exceptions to \eqref{eq:dlaw}. The paper already notes that their upper failure mechanisms differ.
+\item The \(j=15,17,19,21,23\) probes certify upper endpoints; the \(j=15\) and \(j=19\) lower endpoints were also certified. The existence of a gap between the endpoints of an interval is not excluded by the endpoint checks.
+\end{enumerate}
+
+\section{What is proved, certified, and open}\label{sec:status}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Status ledger for the current findings.}
+\label{tab:status}
+\begin{tabular}{p{0.46\textwidth}p{0.22\textwidth}p{0.24\textwidth}}
+\toprule
+Result & Status & Evidence\\
+\midrule
+Exact interval formula for \(Q_n\) (Theorem A) & proved & symbolic proof\\
+Eventual periodicity for fixed \(k,m\) & proved & pigeonhole + finite memory\\
+\(A=86\) regime for \(k=58,\dots,78\) (Theorem B) & certified & 21 exact certificates\\
+Universal row theorem and recursion & proved & strong induction\\
+Closed-form maximal run hierarchy & proved & doubling lemma\\
+\(k<A\) for any valid template & proved & first-move obstruction\\
+Collapse iff \(k=A-1\) & proved & cyclic group argument\\
+Twelve intervals through \(j=13\) & certified & 10{,}323 exact pairs\\
+Lower boundary mechanism & proved & universal row argument\\
+Upper endpoint law \(K_j\) & conjectured & fits upper endpoints \(j=7,9,11,13,15,17,19,21,23\)\\
+Full \(j=15,17,19,21,23\) intervals & open & endpoints or upper endpoints only\\
+Uniform regime theorem & open & no symbolic derivation\\
+All-group genuine/non-genuine pattern & open & conjecture\\
+Global originality review & open & not completed\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The main open problem remains a parameter-uniform symbolic proof. The current certificates prove each fixed \((k,A)\) pair, but they do not explain why the template holds on an entire interval, nor do they derive the constants \(A_{j,\varepsilon}\) or the endpoint law from the game recurrence. The next natural target is a finite, piecewise affine formula for \(Q_n\) uniformly in \(k\) on a regime, stable under the exact set recurrence.
+
+\section{Verification and reproducibility}\label{sec:verify}
+
+The repository is designed to run without external Python packages. From the repository root:
+\begin{verbatim}
+python src/verify_package.py
+python src/verify_hierarchy.py
+python src/check_j13_evidence.py
+python src/verify_j13.py
+python src/large_scale_checks.py
+python src/sync_manuscripts.py --check
+python -m unittest discover -s tests
+\end{verbatim}
+
+The combined verifier regenerates certificates in a temporary directory, compares them with the published files, and checks the manuscript tables. The hierarchy verifier certifies the original \(2{,}583\) pairs and falsifies both boundaries of each interval. The \(j=13\) evidence checker validates the CSV hash and parameter coverage, freshly certifies the endpoints and collapse case, and reproduces the adjacent counterexamples; it does not recompute every interior pair. The resumable \(j=13\) run can recompute all pairs from a fresh checkpoint, which may take hours.
+
+The published certificate hashes are:
+\begin{align*}
+\text{original hierarchy:}&\quad
+\texttt{32073cb657be02cecb9e59ca49abc1923eda1f74cd6cfe6d0a57abb1990f0d07},\\
+j=13\text{ extension:}&\quad
+\texttt{1700dd171886e6858742f13af3d9db229480d5cefa5ee7131c40330f68052e92}.
+\end{align*}
+
+The new \(j=15\) endpoint probe was run with the same certifier:
+\begin{verbatim}
+python -c "import sys; sys.path.insert(0,'src');
+from verify_hierarchy import certify, falsify;
+print(certify(80099,87382));
+print(falsify(80100,87382))"
+\end{verbatim}
+It returned a valid certificate at \(k=80{,}099\) and first failure \(334{,}966\) at \(k=80{,}100\).
+
+The larger endpoint probes use the standalone scripts \texttt{notes/compact\_probe.py} and \texttt{notes/lean\_probe.py}. They reproduce the \(m=1\) recurrence with compact row storage and write no repository data:
+\begin{verbatim}
+python notes/compact_probe.py --k 80099 --A 87382 --mode upper
+python notes/compact_probe.py --k 60074 --A 87382 --mode lower
+python notes/compact_probe.py --k 1281593 --A 1398102 --mode upper
+python notes/compact_probe.py --k 961194 --A 1398102 --mode lower
+python notes/lean_probe.py --k 320399 --A 349526
+python notes/lean_probe.py --k 20505487 --A 22369622
+python notes/lean_probe.py --k 20505488 --A 22369622 --mode upper-fail
+\end{verbatim}
+The streaming \texttt{lean\_probe.py} keeps only the two endpoint arrays and the first \(k\) rows; it is used when the full row arrays of \texttt{compact\_probe.py} become large.
+
+An independent audit in \texttt{audits/2026-10-12/} reproduced the A/B/C certificates and found no mathematical counterexample or invalid proof step in the stated theorems. It did flag verification-harness issues---Theorem D is not integrated into the combined verifier, assertion-based checks can be disabled under \texttt{python -O}, and committed CRLF JSON bytes can break byte comparisons on Linux---which concern the verification plumbing rather than the mathematical results above.
+
+\section{Conclusion}
+
+The current findings form a coherent hierarchy:
+\[
+\text{game rules}
+\;\longrightarrow\;
+\text{exact interval rows}
+\;\longrightarrow\;
+\text{universal binary recursion}
+\;\longrightarrow\;
+\text{closed-form runs}
+\;\longrightarrow\;
+\text{residue templates}
+\;\longrightarrow\;
+\text{certified regimes}.
+\]
+The proved core explains the row geometry and the run hierarchy. The certified layer covers \(10{,}323\) parameter pairs through \(j=13\). The new endpoint law \eqref{eq:dlaw}--\eqref{eq:Klaw} is the first compact equation that reproduces the entire known deficit sequence, including the newly probed upper endpoints at \(j=15,17,19,21,23\). It is a conjecture, but a sharply testable one: every odd \(j\ge7\) gives a predicted \(K_j\), and a single counterexample would falsify the law.
+
+\appendix
+
+\section{Constants and notation}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Notation used in this note.}
+\begin{tabular}{ll}
+\toprule
+Symbol & Meaning\\
+\midrule
+\(D(k,m)\) & game with maximum removal \(k\) and distance \(m\)\\
+\(Q_n\) & set of previous removals \(s\) making \((n,s)\) losing\\
+\(A_n\) & set of removals \(r\) with \(r\in Q_{n-r}\)\\
+\(r(n)\) & \(1\) if the universal row \(Q_n\) is nonempty, else \(0\)\\
+\(G_{j,\varepsilon},L_{j,\varepsilon}\) & start and length of the \(\varepsilon\)-th \(1\)-run of group \(j\)\\
+\(A_{j,\varepsilon}\) & the three run starts \(G_{j,\varepsilon}\)\\
+\(p\) & template period \(2k+A+2\)\\
+\(K_j\) & certified upper endpoint for the \(A_{j,1}\) interval\\
+\(d_j\) & upper deficit \(A_{j,1}-K_j\)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Probe log for \(j=15,17,19,21,23\)}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Exact probe results for \(A=87{,}382\) (\(j=15\)).}
+\begin{tabular}{rrrr}
+\toprule
+Quantity & Value & Check & Result\\
+\midrule
+\(A_{15,1}\) & 87{,}382 & formula \eqref{eq:Avalues} & ---\\
+\(k_{\min}\) & 60{,}074 & certify & accepted\\
+\(k_{\min}-1\) & 60{,}073 & falsify & fails at \(n=60{,}074\)\\
+\(K_{15}\) candidate & 80{,}099 & certify & accepted\\
+\(K_{15}+1\) & 80{,}100 & falsify & fails at \(n=334{,}966\)\\
+\(d_{15}\) & 7{,}283 & \(87{,}382-80{,}099\) & matches \eqref{eq:dlaw}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The certifier output at \(k=80{,}099\) was
+\[
+\{\text{period}=247{,}582,\ \text{window start}=0,\ \text{bridge}=327{,}680,\ \text{least start period}=247{,}582\}.
+\]
+At the lower endpoint \(k=60{,}074\) the window starts at \(t=60{,}074\) with
+period \(p=207{,}532\) and bridge \(327{,}679\).
+
+\begin{table}[h]
+\centering
+\small
+\caption{Exact probe results for \(A=349{,}526\) (\(j=17\)). The lower endpoint was not certified.}
+\begin{tabular}{rrrr}
+\toprule
+Quantity & Value & Check & Result\\
+\midrule
+\(A_{17,1}\) & 349{,}526 & formula \eqref{eq:Avalues} & ---\\
+\(k_{\min}\) predicted & 240{,}298 & formula \eqref{eq:kmin1} & not certified\\
+\(K_{17}\) candidate & 320{,}399 & window + bridge & accepted\\
+\(K_{17}+1\) & 320{,}400 & falsify & fails at \(n=1{,}339{,}854\)\\
+\(d_{17}\) & 29{,}127 & \(349{,}526-320{,}399\) & matches \eqref{eq:dlaw}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The certifier conditions at \(k=320{,}399\) were
+\[
+\{\text{period}=990{,}326,\ \text{window start}=0,\ \text{bridge}=1{,}310{,}724,\ \text{least start period}=990{,}326\}.
+\]
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Summary of the new endpoint probes. For a checked endpoint, the parenthetical pair is (adjacent parameter, first counterexample \(n\)).}
+\begin{tabular}{rrrrrr}
+\toprule
+\(j\) & \(A_{j,1}\) & \(k_{\min}\) & \(K_j\) & lower & upper\\
+\midrule
+15 & 87{,}382 & 60{,}074 & 80{,}099 & yes (60{,}073/60{,}074) & yes (80{,}100/334{,}966)\\
+17 & 349{,}526 & 240{,}298 & 320{,}399 & not certified & yes (320{,}400/1{,}339{,}854)\\
+19 & 1{,}398{,}102 & 961{,}194 & 1{,}281{,}593 & yes (961{,}193/961{,}194) & yes (1{,}281{,}594/5{,}359{,}394)\\
+21 & 5{,}592{,}406 & 3{,}844{,}778 & 5{,}126{,}371 & not certified & yes (5{,}126{,}372/21{,}437{,}558)\\
+23 & 22{,}369{,}622 & 15{,}379{,}114 & 20{,}505{,}487 & not certified & yes (20{,}505{,}488/85{,}750{,}222)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For \(j=19\), the lower-endpoint window starts at \(t=961{,}194\) with period
+\(p=3{,}320{,}492\) and bridge \(5{,}242{,}879\). The upper-endpoint window starts
+at \(t=0\) with period \(p=3{,}961{,}290\) and bridge \(5{,}242{,}882\). For
+\(j=21\), the upper-endpoint period is \(p=15{,}845{,}150\) with bridge
+\(20{,}971{,}520\). For \(j=23\), the upper-endpoint period is \(p=63{,}380{,}598\)
+with bridge \(83{,}886{,}084\).
+
+\begin{thebibliography}{9}
+\bibitem{sprague1935}
+R.~Sprague.
+\newblock \"Uber mathematische Kampfspiele.
+\newblock \emph{T\^ohoku Mathematical Journal}, 41:438--444, 1935.
+
+\bibitem{grundy1939}
+P.~M. Grundy.
+\newblock Mathematics and games.
+\newblock \emph{Eureka}, 2:6--8, 1939.
+
+\bibitem{winningways2001}
+E.~R. Berlekamp, J.~H. Conway, and R.~K. Guy.
+\newblock \emph{Winning Ways for Your Mathematical Plays}, Volume~1, 2nd edition.
+\newblock A K Peters, 2001.
+
+\bibitem{gurvich2012}
+V.~Gurvich.
+\newblock On repetition-free subtraction games and vile-dopey integers.
+\newblock Technical Report RRR-01-2012, Rutgers Center for Operations Research, 2012.
+\end{thebibliography}
+
+\end{document}
