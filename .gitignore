@@ -23,6 +23,9 @@ distance_subtraction_research
 *.fls
 *.fdb_latexmk
 
+# Graphify working directory (curated map artifacts live in notes/graph/)
+graphify-out/
+
 # Editors / OS
 .vscode/
 .idea/

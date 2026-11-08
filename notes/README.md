@@ -16,6 +16,24 @@
   (`A = 22369622`, `K = 20505487`);
 - status, verification commands, constants, and a probe log.
 
+## Repository map
+
+A Graphify-generated code map is in [`graph/`](graph/README.md):
+
+- [`graph/graph.html`](graph/graph.html) — interactive graph (download and
+  open in a browser);
+- [`graph/GRAPH_CALLFLOW.html`](graph/GRAPH_CALLFLOW.html) — architecture and
+  call-flow view;
+- [`graph/GRAPH_REPORT.md`](graph/GRAPH_REPORT.md) — communities, hubs, and
+  knowledge gaps.
+
+![Graphify map of the repository](graph/graph_preview.png)
+
+The map indexes 31 Python/C++ files (296 nodes, 656 edges, 15 communities).
+The LaTeX manuscripts and certificate data are not part of the code graph; the
+hand-authored research pipeline in [`graph/README.md`](graph/README.md) shows
+how they connect.
+
 Compile from this directory:
 
 ```console

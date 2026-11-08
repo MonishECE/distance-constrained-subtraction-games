@@ -1,0 +1,17 @@
+{
+  "0": "Affine-region extraction",
+  "1": "Hierarchy certification",
+  "2": "Reference Python solver",
+  "3": "Large-scale scanning",
+  "4": "C++ CLI configuration",
+  "5": "Probes and manuscript sync",
+  "6": "C++ CLI parsing",
+  "7": "Verification safety tests",
+  "8": "C++ scan result model",
+  "9": "Affine period mining",
+  "10": "Period detection and output",
+  "11": "Single-game solver and self-test",
+  "12": "Game computation model",
+  "13": "Affine-template regime scan",
+  "14": "Independent P/N audit"
+}

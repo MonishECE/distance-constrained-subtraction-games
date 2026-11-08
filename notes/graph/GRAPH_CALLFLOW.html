@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>distance-constrained-subtraction-games — Complete Call Flow &amp; Architecture Documentation</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --warn: #fbbf24; --err: #f87171; --ok: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 2.4rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 1.7rem; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 1.25rem; margin: 32px 0 12px; color: var(--accent); }
+h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--warn); }
+p { margin: 8px 0; color: var(--muted); }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; }
+.mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto; position: relative; }
+.mermaid.is-enhanced { padding: 0; overflow: hidden; min-height: 260px; }
+.mermaid-viewport { padding: 54px 24px 24px; overflow: hidden; cursor: grab; touch-action: none; min-height: 260px; }
+.mermaid-viewport.is-dragging { cursor: grabbing; }
+.mermaid-viewport svg { max-width: none !important; height: auto; transform-origin: 0 0; transition: transform 120ms ease; }
+.mermaid-toolbar { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.mermaid-toolbar button, .mermaid-toolbar .zoom-level { height: 28px; min-width: 32px; border: 1px solid var(--border); border-radius: 6px; background: #1e293b; color: var(--text); font: 600 0.78rem system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; }
+.mermaid-toolbar button { cursor: pointer; }
+.mermaid-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.mermaid-toolbar .zoom-level { min-width: 52px; color: var(--muted); background: transparent; }
+.call-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92rem; }
+.call-table th { background: #1a2744; color: var(--accent); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+.call-table td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+.call-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.tag-async { background: #7c3aed33; color: #a78bfa; }
+.tag-class { background: #05966933; color: var(--ok); }
+.tag-func { background: #2563eb33; color: var(--accent); }
+.tag-cmd { background: #d9770633; color: var(--warn); }
+.tag-endpoint { background: #dc262633; color: var(--err); }
+.tag-hook { background: #db277733; color: #f472b6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+.arrow-chain { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--accent); padding: 10px; background: rgba(56,189,248,0.06); border-radius: 6px; }
+code { font-family: 'Fira Code', 'Cascadia Code', monospace; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.88em; }
+ul, ol { margin: 8px 0 8px 24px; color: var(--muted); }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.nav { position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>distance-constrained-subtraction-games — Complete Call Flow &amp; Architecture Documentation</h1>
+<p class="subtitle">Generated from graphify knowledge graph: 296 nodes, 656 edges, 15 communities. Commit: e485fcc</p>
+
+<div class="nav">
+    <a href="#overview">Architecture Overview</a>
+    <a href="#solvers">Python solvers and scans</a>
+    <a href="#cpp">C++ reference implementation</a>
+    <a href="#certification">Theorem certification</a>
+    <a href="#affine">Affine-region extraction</a>
+    <a href="#probes">Research probes and manuscript sync</a>
+    <a href="#tests">Tests and independent audits</a>
+</div>
+
+<!-- ====== Architecture Overview ====== -->
+<h2 id="overview">1. Architecture Overview</h2>
+
+<div class="mermaid">
+
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    SOLVERS_B9CF6CAF("Python solvers and scans<br/><small>65 nodes</small>")
+    class SOLVERS_B9CF6CAF module;
+    CPP_EDD9A349("C++ reference implementation<br/><small>98 nodes</small>")
+    class CPP_EDD9A349 module;
+    CERTIFICATION_064122CB("Theorem certification<br/><small>39 nodes</small>")
+    class CERTIFICATION_064122CB module;
+    AFFINE_56B4F3F1("Affine-region extraction<br/><small>51 nodes</small>")
+    class AFFINE_56B4F3F1 module;
+    PROBES_6461207A("Research probes and manuscript sync<br/><small>21 nodes</small>")
+    class PROBES_6461207A module;
+    TESTS_04D13FD0("Tests and independent audits<br/><small>22 nodes</small>")
+    class TESTS_04D13FD0 module;
+    SOLVERS_B9CF6CAF -->|calls x15| CERTIFICATION_064122CB
+    CERTIFICATION_064122CB -->|imports x13| SOLVERS_B9CF6CAF
+    SOLVERS_B9CF6CAF -->|imports x10| PROBES_6461207A
+    CERTIFICATION_064122CB -->|calls x10| AFFINE_56B4F3F1
+    TESTS_04D13FD0 -->|imports x8| CERTIFICATION_064122CB
+    CERTIFICATION_064122CB -->|imports x6| TESTS_04D13FD0
+    SOLVERS_B9CF6CAF -->|imports x5| TESTS_04D13FD0
+    AFFINE_56B4F3F1 -->|imports x4| TESTS_04D13FD0
+    AFFINE_56B4F3F1 -->|calls x4| PROBES_6461207A
+    AFFINE_56B4F3F1 -->|calls x4| CERTIFICATION_064122CB
+    CERTIFICATION_064122CB -->|calls x4| PROBES_6461207A
+    SOLVERS_B9CF6CAF -->|imports x3| AFFINE_56B4F3F1
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Architecture Layers</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
+      <tr><td>Python solvers and scans</td><td>65</td><td><code>2, 3, 13</code></td></tr><tr><td>C++ reference implementation</td><td>98</td><td><code>4, 6, 8, 9, 10, 11, 12</code></td></tr><tr><td>Theorem certification</td><td>39</td><td><code>1</code></td></tr><tr><td>Affine-region extraction</td><td>51</td><td><code>0</code></td></tr><tr><td>Research probes and manuscript sync</td><td>21</td><td><code>5</code></td></tr><tr><td>Tests and independent audits</td><td>22</td><td><code>7, 14</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Core Flow</h4>
+    <div class="arrow-chain">C++ reference implementation -&gt; Tests and independent audits -&gt; Theorem certification -&gt; Python solvers and scans -&gt; Research probes and manuscript sync -&gt; Affine-region extraction</div>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <h4>Graph Report Highlights</h4>
+    <ul>
+      <li>296 nodes · 656 edges · 15 communities (14 shown, 1 thin omitted)</li>
+      <li>Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.85)</li>
+      <li>Token cost: 0 input · 0 output</li>
+      <li>1. `Args` - 31 edges</li>
+      <li>2. `ScanResult` - 20 edges</li>
+      <li>3. `fast_interval_solver()` - 18 edges</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<!-- ====== 2. Python solvers and scans ====== -->
+<h2 id="solvers">2. Python solvers and scans</h2>
+<p>Python solvers and scans groups implementation around distance, subtraction, researchpy, regime, mostly in src/distance_subtraction_research.py, src/large_scale_checks.py, src/regime_scan.py. This section covers 65 nodes and 121 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Python solvers and scans (65 nodes, 121 edges)
+    subgraph solvers_src_distance_subtraction_research_py_3fe35511["src/distance_subtraction_research.py"]
+        src_distance_subtraction_research_py_src_distanc_72dafe40("cmd_scan()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_9e77ef09("distance_subtraction_research.py")
+        src_distance_subtraction_research_py_src_distanc_5aec2187("cmd_single()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_f8bd6198("cmd_test_period_formula()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_71d80d7d("solve_game()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_mex_from_mask_e28adb56("mex_from_mask()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_0678b7da("GameComputation<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_42120147("period_description()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_cc1a5c28("detect_eventual_period()<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_83d8146d("ScanResult<br/><small>src/distance_subtraction_research.py</small>")
+        src_distance_subtraction_research_py_src_distanc_3195ff67("full state cycle()<br/><small>src/distance_subtraction_research.py</small>")
+    end
+    subgraph solvers_src_regime_scan_py_e2a6a7df["src/regime_scan.py"]
+        src_regime_scan_main_417e4836("main()<br/><small>src/regime_scan.py</small>")
+        src_regime_scan_scan_one_97413719("scan_one()<br/><small>src/regime_scan.py</small>")
+        src_regime_scan_minimal_suffix_period_862c8472("minimal_suffix_period()<br/><small>src/regime_scan.py</small>")
+        src_regime_scan_template_matches_ba09bd20("template_matches()<br/><small>src/regime_scan.py</small>")
+    end
+    subgraph solvers_src_large_scale_checks_py_92797c3a["src/large_scale_checks.py"]
+        src_large_scale_checks_verify_runs_5e2e70d2("verify_runs()<br/><small>src/large_scale_checks.py</small>")
+        src_large_scale_checks_12a66b1d("large_scale_checks.py")
+    end
+    gc_ec6d9083("gc")
+    src_distance_subtraction_research_py_src_distanc_71d80d7d -->|calls| src_distance_subtraction_research_mex_from_mask_e28adb56
+    src_distance_subtraction_research_py_src_distanc_71d80d7d -->|calls| src_distance_subtraction_research_py_src_distanc_0678b7da
+    src_distance_subtraction_research_py_src_distanc_42120147 -->|calls| src_distance_subtraction_research_py_src_distanc_cc1a5c28
+    src_distance_subtraction_research_py_src_distanc_42120147 -->|calls| src_distance_subtraction_research_py_src_distanc_83d8146d
+    src_regime_scan_main_417e4836 -->|calls| src_regime_scan_scan_one_97413719
+    src_regime_scan_scan_one_97413719 -->|calls| src_regime_scan_minimal_suffix_period_862c8472
+    src_regime_scan_scan_one_97413719 -->|calls| src_regime_scan_template_matches_ba09bd20
+    src_distance_subtraction_research_py_src_distanc_72dafe40 -->|calls| src_distance_subtraction_research_py_src_distanc_71d80d7d
+    src_distance_subtraction_research_py_src_distanc_72dafe40 -->|calls| src_distance_subtraction_research_py_src_distanc_42120147
+    src_distance_subtraction_research_py_src_distanc_72dafe40 -->|calls| src_distance_subtraction_research_py_src_distanc_3195ff67
+    src_distance_subtraction_research_py_src_distanc_72dafe40 -->|calls| gc_ec6d9083
+    src_distance_subtraction_research_py_src_distanc_5aec2187 -->|calls| src_distance_subtraction_research_py_src_distanc_71d80d7d
+    src_distance_subtraction_research_py_src_distanc_5aec2187 -->|calls| src_distance_subtraction_research_py_src_distanc_42120147
+    src_distance_subtraction_research_py_src_distanc_5aec2187 -->|calls| src_distance_subtraction_research_py_src_distanc_3195ff67
+    src_distance_subtraction_research_py_src_distanc_f8bd6198 -->|calls| src_distance_subtraction_research_py_src_distanc_71d80d7d
+    src_distance_subtraction_research_py_src_distanc_f8bd6198 -->|calls| src_distance_subtraction_research_py_src_distanc_42120147
+    src_distance_subtraction_research_py_src_distanc_f8bd6198 -->|calls| gc_ec6d9083
+    src_distance_subtraction_research_py_src_distanc_9e77ef09 -->|imports| gc_ec6d9083
+    %% Omitted for readability: 47 nodes, 0 edges
+    class src_distance_subtraction_research_py_src_distanc_72dafe40 function;
+    class src_distance_subtraction_research_py_src_distanc_9e77ef09 module;
+    class src_distance_subtraction_research_py_src_distanc_5aec2187 function;
+    class src_distance_subtraction_research_py_src_distanc_f8bd6198 function;
+    class src_distance_subtraction_research_py_src_distanc_71d80d7d function;
+    class src_distance_subtraction_research_mex_from_mask_e28adb56 function;
+    class src_distance_subtraction_research_py_src_distanc_0678b7da klass;
+    class src_distance_subtraction_research_py_src_distanc_42120147 function;
+    class src_distance_subtraction_research_py_src_distanc_cc1a5c28 function;
+    class src_distance_subtraction_research_py_src_distanc_83d8146d klass;
+    class src_distance_subtraction_research_py_src_distanc_3195ff67 function;
+    class src_regime_scan_main_417e4836 function;
+    class src_regime_scan_scan_one_97413719 function;
+    class src_regime_scan_minimal_suffix_period_862c8472 function;
+    class src_regime_scan_template_matches_ba09bd20 function;
+    class src_large_scale_checks_verify_runs_5e2e70d2 function;
+    class src_large_scale_checks_12a66b1d module;
+    class gc_ec6d9083 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>GameComputation</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>GameComputation node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>ScanResult</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td><code>period_description()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Starts scanning or handles scan status.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>argparse</code><br><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_self_test()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br>+2 more</td>
+  <td>build_parser() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_self_test()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_single()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br>+1 more</td>
+  <td><code>GameComputation</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>mex_from_mask()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>solve_game() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>period_description()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_single()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_test_period_formula()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>detect_eventual_period()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>hashlib</code><br><code>ScanResult</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>period_description() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>slow()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>slow() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>mex_from_mask()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>mex_from_mask() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>full state cycle()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>gc</code><br><code>mine_affine_period_laws()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br>+4 more</td>
+  <td>Starts scanning or handles scan status.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>cmd_self_test()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>cmd_single()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>full state cycle()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>period_description()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>cmd_single() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>cmd_test_period_formula()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>gc</code><br><code>period_description()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>solve_game()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>detect_eventual_period()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>period_description()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>detect_eventual_period() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>detect_exact_full_state_cycle()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_single()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>hashlib</code></td>
+  <td>detect_exact_full_state_cycle() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>main() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>mine_affine_period_laws()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>mine_affine_period_laws() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>unusual_cases()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>unusual_cases() node in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>write_scan_outputs()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><code>csv</code></td>
+  <td>Starts scanning or handles scan status.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>ArgumentParser</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ArgumentParser node in project.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>Namespace</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Namespace node in project.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>Path</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Path node in project.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>distance_subtraction_research.py</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>array</code><br><code>csv</code><br>+8 more</td>
+  <td>Module file in src/distance_subtraction_research.py.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>Compute all SG states g(n, previous_move) for 0 &lt;= n &lt;= n_max. Complexity is…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Compute all SG states g(n, previous_move) for 0 &lt;= n &lt;= n_max. Complexity is….</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>distance_subtraction_research.py Research engine for distance-constrained…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for distance_subtraction_research.py Research engine for distance-constrained….</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>Find the smallest p &lt;= max_period that is consistent with an eventual period…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Find the smallest p &lt;= max_period that is consistent with an eventual period….</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>Look for an exactly repeated k-row SG state window. Once n &gt;= k, the recurrence…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Look for an exactly repeated k-row SG state window. Once n &gt;= k, the recurrence….</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>Search for exact observed rules: period(k) = a*k + b separately on k congruence…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Search for exact observed rules: period(k) = a*k + b separately on k congruence….</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>Surface computationally unusual cases. &quot;Unusual&quot; does NOT mean novel.</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Surface computationally unusual cases. &quot;Unusual&quot; does NOT mean novel..</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>Test: period(k,m) == a*k + b for k in the requested range satisfying k == r…</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Test: period(k,m) == a*k + b for k in the requested range satisfying k == r….</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>mex of a set represented by a nonnegative integer bit mask.</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for mex of a set represented by a nonnegative integer bit mask..</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>gc</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>cmd_scan()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>cmd_test_period_formula()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>distance_subtraction_research.py</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>gc node in project.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>src/distance_subtraction_research.py</code></td><td>26 nodes</td></tr>
+<tr><td><code>src/large_scale_checks.py</code></td><td>10 nodes</td></tr>
+<tr><td><code>src/regime_scan.py</code></td><td>8 nodes</td></tr>
+<tr><td><code>src/regime_hierarchy.py</code></td><td>5 nodes</td></tr>
+<tr><td><code>src/targeted_scans.py</code></td><td>5 nodes</td></tr>
+<tr><td><code>src/fast_solver.py</code></td><td>4 nodes</td></tr>
+<tr><td><code>src/universal_runs.py</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls x37, contains x36, explains x16, imports x13. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 3. C++ reference implementation ====== -->
+<h2 id="cpp">3. C++ reference implementation</h2>
+<p>C++ reference implementation groups implementation around distance, subtraction, researchcpp, max, mostly in src/distance_subtraction_research.cpp. This section covers 98 nodes and 173 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: C++ reference implementation (98 nodes, 173 edges)
+    src_distance_subtraction_research_cpp_src_distan_3a9057c6("distance subtraction research.cpp<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_e58065e1("cmd_scan()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3("main()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_803d63c5("cmd_single()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_87a52a9c("write_scan_outputs()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_parse_args_4dc195d7("parse_args()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_rational_e287b1ac("Rational<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_rational_ratio_d4578934("Rational()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_7fd84556("full state cycle()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_fnv1a64_u16_916be96f("fnv1a64_u16()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_equal_u16_wind_c1408ac2("equal_u16_window()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_opt_int_c8845937("opt_int()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_csv_escape_4b2339fc("csv_escape()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_opt_double_7dcd154c("opt_double()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_3a23d55a("cmd_self_test()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_ff43366d("solve_game()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_c9ad5a61("period_description()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_cpp_src_distan_1ec151db("cmd_test_period_formula()<br/><small>src/distance_subtraction_research.cpp</small>")
+    src_distance_subtraction_research_rational_e287b1ac -->|method| src_distance_subtraction_research_rational_ratio_d4578934
+    src_distance_subtraction_research_cpp_src_distan_7fd84556 -->|calls| src_distance_subtraction_research_fnv1a64_u16_916be96f
+    src_distance_subtraction_research_cpp_src_distan_7fd84556 -->|calls| src_distance_subtraction_research_equal_u16_wind_c1408ac2
+    src_distance_subtraction_research_cpp_src_distan_87a52a9c -->|calls| src_distance_subtraction_research_opt_int_c8845937
+    src_distance_subtraction_research_cpp_src_distan_87a52a9c -->|calls| src_distance_subtraction_research_csv_escape_4b2339fc
+    src_distance_subtraction_research_cpp_src_distan_87a52a9c -->|calls| src_distance_subtraction_research_opt_double_7dcd154c
+    src_distance_subtraction_research_cpp_src_distan_3a23d55a -->|calls| src_distance_subtraction_research_cpp_src_distan_ff43366d
+    src_distance_subtraction_research_cpp_src_distan_803d63c5 -->|calls| src_distance_subtraction_research_cpp_src_distan_ff43366d
+    src_distance_subtraction_research_cpp_src_distan_803d63c5 -->|calls| src_distance_subtraction_research_cpp_src_distan_c9ad5a61
+    src_distance_subtraction_research_cpp_src_distan_803d63c5 -->|calls| src_distance_subtraction_research_cpp_src_distan_7fd84556
+    src_distance_subtraction_research_cpp_src_distan_1ec151db -->|calls| src_distance_subtraction_research_cpp_src_distan_ff43366d
+    src_distance_subtraction_research_cpp_src_distan_1ec151db -->|calls| src_distance_subtraction_research_cpp_src_distan_c9ad5a61
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3 -->|calls| src_distance_subtraction_research_parse_args_4dc195d7
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3 -->|calls| src_distance_subtraction_research_cpp_src_distan_3a23d55a
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3 -->|calls| src_distance_subtraction_research_cpp_src_distan_803d63c5
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3 -->|calls| src_distance_subtraction_research_cpp_src_distan_e58065e1
+    src_distance_subtraction_research_cpp_src_distan_87fa23f3 -->|calls| src_distance_subtraction_research_cpp_src_distan_1ec151db
+    src_distance_subtraction_research_cpp_src_distan_e58065e1 -->|calls| src_distance_subtraction_research_cpp_src_distan_ff43366d
+    src_distance_subtraction_research_cpp_src_distan_e58065e1 -->|calls| src_distance_subtraction_research_cpp_src_distan_c9ad5a61
+    src_distance_subtraction_research_cpp_src_distan_e58065e1 -->|calls| src_distance_subtraction_research_cpp_src_distan_7fd84556
+    src_distance_subtraction_research_cpp_src_distan_e58065e1 -->|calls| src_distance_subtraction_research_cpp_src_distan_87a52a9c
+    %% Omitted for readability: 80 nodes, 0 edges
+    class src_distance_subtraction_research_cpp_src_distan_3a9057c6 function;
+    class src_distance_subtraction_research_cpp_src_distan_e58065e1 function;
+    class src_distance_subtraction_research_cpp_src_distan_87fa23f3 function;
+    class src_distance_subtraction_research_cpp_src_distan_803d63c5 function;
+    class src_distance_subtraction_research_cpp_src_distan_87a52a9c function;
+    class src_distance_subtraction_research_parse_args_4dc195d7 function;
+    class src_distance_subtraction_research_rational_e287b1ac klass;
+    class src_distance_subtraction_research_rational_ratio_d4578934 function;
+    class src_distance_subtraction_research_cpp_src_distan_7fd84556 function;
+    class src_distance_subtraction_research_fnv1a64_u16_916be96f function;
+    class src_distance_subtraction_research_equal_u16_wind_c1408ac2 function;
+    class src_distance_subtraction_research_opt_int_c8845937 function;
+    class src_distance_subtraction_research_csv_escape_4b2339fc function;
+    class src_distance_subtraction_research_opt_double_7dcd154c function;
+    class src_distance_subtraction_research_cpp_src_distan_3a23d55a function;
+    class src_distance_subtraction_research_cpp_src_distan_ff43366d function;
+    class src_distance_subtraction_research_cpp_src_distan_c9ad5a61 function;
+    class src_distance_subtraction_research_cpp_src_distan_1ec151db function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Args</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Args node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>a</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>a node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>b</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>b node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>command</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-cmd">Entry</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>command node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>exact_cycle_k_max</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>exact_cycle_k_max node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>exact_cycle_max_n</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>exact_cycle_max_n node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>exact_state_cycle</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>exact_state_cycle node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>has_a</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>has_a node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>has_b</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>has_b node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>has_k_max</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>has_k_max node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>has_k_min</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>has_k_min node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>k</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>k node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>k_max</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>k_max node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>k_min</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>k_min node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>m</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>m node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>m_values</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>m_values node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>max_modulus</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>max_modulus node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>max_period</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>max_period node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>min_family_points</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>min_family_points node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>min_repeats</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>min_repeats node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>n</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>n node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>out</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>out node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>q</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>q node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>r</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>r node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>show_p</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>show_p node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>parse_args()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><code>parse_int()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small><br><code>print_help()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small><br><code>starts_with_dashdash()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td>parse_args() node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>parse_int()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>parse_args()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>parse_int() node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>print_help()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small><br><code>parse_args()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>print_help() node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>starts_with_dashdash()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>parse_args()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>starts_with_dashdash() node in src/distance_subtraction_research.cpp.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>distance_subtraction_research.cpp</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>algorithm</code><br><code>cassert</code><br><code>chrono</code><br>+18 more</td>
+  <td>distance_subtraction_research.cpp node in src/distance_subtraction_research.cpp.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>src/distance_subtraction_research.cpp</code></td><td>77 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: defines x45, references x44, calls x34, contains x30. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 4. Theorem certification ====== -->
+<h2 id="certification">4. Theorem certification</h2>
+<p>Theorem certification groups implementation around verify, theorem, methodology, hierarchypy, mostly in src/verify_hierarchy.py, methodology/theorem_B/verify_theorems_ab.py, methodology/theorem_C/verify_theorem_c.py. This section covers 39 nodes and 104 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Theorem certification (39 nodes, 104 edges)
+    subgraph certification_methodology_theorem_B_verify_theor_05779008["methodology/theorem_B/verify_theorems_ab.py"]
+        methodology_theorem_b_verify_theorems_ab_main_14d17498("main()<br/><small>methodology/theorem_B/verify_theorems_ab.py</small>")
+        methodology_theorem_b_verify_theorems_ab_certify_0a5ed16b("certify()<br/><small>methodology/theorem_B/verify_theorems_ab.py</small>")
+        methodology_theorem_b_verify_theorems_ab_interva_ee8c4fa7("interval_solver()<br/><small>methodology/theorem_B/verify_theorems_ab.py</small>")
+        methodology_theorem_b_verify_theorems_ab_naive_s_f9093058("naive_solver()<br/><small>methodology/theorem_B/verify_theorems_ab.py</small>")
+        methodology_theorem_b_verify_theorems_ab_small_c_f12722c6("small_checks()<br/><small>methodology/theorem_B/verify_theorems_ab.py</small>")
+    end
+    subgraph certification_methodology_theorem_C_verify_theor_15058955["methodology/theorem_C/verify_theorem_c.py"]
+        methodology_theorem_c_verify_theorem_c_certify_570c4d44("certify()<br/><small>methodology/theorem_C/verify_theorem_c.py</small>")
+        methodology_theorem_c_verify_theorem_c_targets_37b80de8("targets()<br/><small>methodology/theorem_C/verify_theorem_c.py</small>")
+        methodology_theorem_c_verify_theorem_c_falsify_a7c6db13("falsify()<br/><small>methodology/theorem_C/verify_theorem_c.py</small>")
+        methodology_theorem_c_verify_theorem_c_main_f6510586("main()<br/><small>methodology/theorem_C/verify_theorem_c.py</small>")
+    end
+    subgraph certification_External_generated_f94aa7d1["External / generated"]
+        csv_6cc98174("csv")
+        hashlib_7616ac97("hashlib")
+        json_05d97e6e("json")
+    end
+    subgraph certification_src_check_j13_evidence_py_3deead47["src/check_j13_evidence.py"]
+        src_check_j13_evidence_64414975("check_j13_evidence.py")
+        src_check_j13_evidence_main_844adbb1("main()<br/><small>src/check_j13_evidence.py</small>")
+    end
+    subgraph certification_src_verify_hierarchy_py_4d85e776["src/verify_hierarchy.py"]
+        src_verify_hierarchy_main_1da7ccba("main()<br/><small>src/verify_hierarchy.py</small>")
+        src_verify_hierarchy_certify_96f281f8("certify()<br/><small>src/verify_hierarchy.py</small>")
+    end
+    subgraph certification_src_verify_j13_py_b84fee55["src/verify_j13.py"]
+        src_verify_j13_f23f031c("verify_j13.py")
+        src_verify_j13_main_1df49064("main()<br/><small>src/verify_j13.py</small>")
+    end
+    methodology_theorem_b_verify_theorems_ab_certify_0a5ed16b -->|calls| methodology_theorem_b_verify_theorems_ab_interva_ee8c4fa7
+    methodology_theorem_b_verify_theorems_ab_certify_0a5ed16b -->|calls| methodology_theorem_b_verify_theorems_ab_naive_s_f9093058
+    methodology_theorem_b_verify_theorems_ab_main_14d17498 -->|calls| methodology_theorem_b_verify_theorems_ab_small_c_f12722c6
+    methodology_theorem_b_verify_theorems_ab_main_14d17498 -->|calls| methodology_theorem_b_verify_theorems_ab_certify_0a5ed16b
+    methodology_theorem_b_verify_theorems_ab_main_14d17498 -->|calls| csv_6cc98174
+    methodology_theorem_b_verify_theorems_ab_main_14d17498 -->|calls| hashlib_7616ac97
+    methodology_theorem_b_verify_theorems_ab_main_14d17498 -->|calls| json_05d97e6e
+    methodology_theorem_b_verify_theorems_ab_small_c_f12722c6 -->|calls| methodology_theorem_b_verify_theorems_ab_interva_ee8c4fa7
+    methodology_theorem_b_verify_theorems_ab_small_c_f12722c6 -->|calls| methodology_theorem_b_verify_theorems_ab_naive_s_f9093058
+    methodology_theorem_c_verify_theorem_c_certify_570c4d44 -->|calls| methodology_theorem_c_verify_theorem_c_targets_37b80de8
+    methodology_theorem_c_verify_theorem_c_falsify_a7c6db13 -->|calls| methodology_theorem_c_verify_theorem_c_targets_37b80de8
+    methodology_theorem_c_verify_theorem_c_main_f6510586 -->|calls| methodology_theorem_c_verify_theorem_c_certify_570c4d44
+    methodology_theorem_c_verify_theorem_c_main_f6510586 -->|calls| methodology_theorem_c_verify_theorem_c_falsify_a7c6db13
+    methodology_theorem_c_verify_theorem_c_main_f6510586 -->|calls| csv_6cc98174
+    methodology_theorem_c_verify_theorem_c_main_f6510586 -->|calls| hashlib_7616ac97
+    methodology_theorem_c_verify_theorem_c_main_f6510586 -->|calls| json_05d97e6e
+    src_check_j13_evidence_main_844adbb1 -->|calls| json_05d97e6e
+    src_check_j13_evidence_main_844adbb1 -->|calls| hashlib_7616ac97
+    src_check_j13_evidence_main_844adbb1 -->|calls| csv_6cc98174
+    src_check_j13_evidence_main_844adbb1 -->|calls| src_verify_hierarchy_certify_96f281f8
+    src_verify_hierarchy_main_1da7ccba -->|calls| src_verify_hierarchy_certify_96f281f8
+    src_verify_hierarchy_main_1da7ccba -->|calls| csv_6cc98174
+    src_verify_hierarchy_main_1da7ccba -->|calls| hashlib_7616ac97
+    src_verify_hierarchy_main_1da7ccba -->|calls| json_05d97e6e
+    %% Omitted for readability: 21 nodes, 15 edges
+    class methodology_theorem_b_verify_theorems_ab_main_14d17498 function;
+    class methodology_theorem_b_verify_theorems_ab_certify_0a5ed16b function;
+    class methodology_theorem_b_verify_theorems_ab_interva_ee8c4fa7 function;
+    class methodology_theorem_b_verify_theorems_ab_naive_s_f9093058 function;
+    class methodology_theorem_b_verify_theorems_ab_small_c_f12722c6 function;
+    class methodology_theorem_c_verify_theorem_c_certify_570c4d44 function;
+    class methodology_theorem_c_verify_theorem_c_targets_37b80de8 function;
+    class methodology_theorem_c_verify_theorem_c_falsify_a7c6db13 function;
+    class methodology_theorem_c_verify_theorem_c_main_f6510586 function;
+    class csv_6cc98174 function;
+    class hashlib_7616ac97 function;
+    class json_05d97e6e function;
+    class src_check_j13_evidence_64414975 module;
+    class src_check_j13_evidence_main_844adbb1 function;
+    class src_verify_hierarchy_main_1da7ccba function;
+    class src_verify_hierarchy_certify_96f281f8 function;
+    class src_verify_j13_f23f031c module;
+    class src_verify_j13_main_1df49064 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td>certify() node in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small><br><code>crosscheck()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+4 more</td>
+  <td>No direct outbound edge</td>
+  <td>interval_solver() node in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>csv</code><br>+3 more</td>
+  <td>main() node in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>crosscheck()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>crosscheck()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br>+3 more</td>
+  <td>No direct outbound edge</td>
+  <td>naive_solver() node in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>small_checks()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td>small_checks() node in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>targets()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td>certify() node in methodology/theorem_C/verify_theorem_c.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>falsify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>targets()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td>falsify() node in methodology/theorem_C/verify_theorem_c.py.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small><br><code>csv</code><br><code>falsify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small><br>+2 more</td>
+  <td>main() node in methodology/theorem_C/verify_theorem_c.py.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>targets()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small><br><code>falsify()</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>targets() node in methodology/theorem_C/verify_theorem_c.py.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>csv</code><br><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+3 more</td>
+  <td>main() node in src/check_j13_evidence.py.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>crosscheck()</code><br><small style="color:var(--muted)">src/fast_solver.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br><code>interval_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td>crosscheck() node in src/fast_solver.py.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>csv</code><br><code>scan_one()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td>main() node in src/regime_scan_big.py.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>scan_one()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br><code>template_first_failure()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td>Starts scanning or handles scan status.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>template_first_failure()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>scan_one()</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>template_first_failure() node in src/regime_scan_big.py.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/verify_j13.py</small><br>+2 more</td>
+  <td><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br><code>find_window()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>targets()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td>certify() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>crosscheck()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br>+2 more</td>
+  <td>crosscheck() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/verify_j13.py</small><br>+2 more</td>
+  <td><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br><code>naive_solver()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br><code>targets()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td>falsify() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>find_window()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br>+1 more</td>
+  <td>No direct outbound edge</td>
+  <td>find_window() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>crosscheck()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>csv</code><br>+3 more</td>
+  <td>main() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>targets()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>targets() node in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>load_done()</code><br><small style="color:var(--muted)">src/verify_j13.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_j13.py</small></td>
+  <td><code>json</code></td>
+  <td>load_done() node in src/verify_j13.py.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_j13.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>csv</code><br><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+3 more</td>
+  <td>main() node in src/verify_j13.py.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>verify_theorems_ab.py</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>audit_checks.py</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>regime_scan.py</code><br><small style="color:var(--muted)">src/regime_scan.py</small><br><code>verify_hierarchy.py</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+1 more</td>
+  <td><code>argparse</code><br><code>csv</code><br><code>full_state_analysis.py</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+4 more</td>
+  <td>Module file in methodology/theorem_B/verify_theorems_ab.py.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>verify_theorem_c.py</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>csv</code><br><code>full_state_analysis.py</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>hashlib</code><br>+4 more</td>
+  <td>Module file in methodology/theorem_C/verify_theorem_c.py.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>csv</code><br><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+5 more</td>
+  <td>Module file in src/check_j13_evidence.py.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>regime_scan_big.py</code><br><small style="color:var(--muted)">src/regime_scan_big.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>csv</code><br><code>fast_interval_solver()</code><br><small style="color:var(--muted)">src/fast_solver.py</small><br>+3 more</td>
+  <td>Module file in src/regime_scan_big.py.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>verify_hierarchy.py</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br><code>compact_probe.py</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>verify_j13.py</code><br><small style="color:var(--muted)">src/verify_j13.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>csv</code><br><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+8 more</td>
+  <td>Module file in src/verify_hierarchy.py.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>verify_j13.py</code><br><small style="color:var(--muted)">src/verify_j13.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>certify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>csv</code><br><code>falsify()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br>+5 more</td>
+  <td>Module file in src/verify_j13.py.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>Exact interval-recurrence verification for Theorems A and B. Rows are integer…</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Exact interval-recurrence verification for Theorems A and B. Rows are integer….</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>Exact fixed-parameter certificates and boundary counterexamples for Theorem C.…</code><br><small style="color:var(--muted)">methodology/theorem_C/verify_theorem_c.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Exact fixed-parameter certificates and boundary counterexamples for Theorem C.….</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>src/verify_hierarchy.py</code></td><td>10 nodes</td></tr>
+<tr><td><code>methodology/theorem_B/verify_theorems_ab.py</code></td><td>7 nodes</td></tr>
+<tr><td><code>methodology/theorem_C/verify_theorem_c.py</code></td><td>6 nodes</td></tr>
+<tr><td><code>src/regime_scan_big.py</code></td><td>5 nodes</td></tr>
+<tr><td><code>src/verify_j13.py</code></td><td>4 nodes</td></tr>
+<tr><td><code>src/check_j13_evidence.py</code></td><td>3 nodes</td></tr>
+<tr><td><code>src/fast_solver.py</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls x49, imports x22, contains x21, explains x8. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 5. Affine-region extraction ====== -->
+<h2 id="affine">5. Affine-region extraction</h2>
+<p>Affine-region extraction groups implementation around affine, region, extractorpy, state, mostly in src/affine_region_extractor.py, src/full_state_analysis.py. This section covers 51 nodes and 89 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Affine-region extraction (51 nodes, 89 edges)
+    subgraph affine_src_affine_region_extractor_py_46114b8f["src/affine_region_extractor.py"]
+        src_affine_region_extractor_a2fe7201("affine_region_extractor.py")
+        src_affine_region_extractor_analyze_0b5d31d4("analyze()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_write_results_1d89c1d0("write_results()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_selftest_f1497a8a("selftest()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_main_fa0dbfb9("main()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_segment_4855638f("Segment<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_segment_cells_135b295f("cells()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_segment_slope_label_14e4f3cf("slope_label()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_segment_formula_58d92c58("formula()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_verify_periodic_ce2c7356("verify_periodic()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_make_cells_55ed1eda("make_cells()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_components_2903ece8("components()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_maximal_segments_167909de("maximal_segments()<br/><small>src/affine_region_extractor.py</small>")
+        src_affine_region_extractor_select_cover_c4ba00f4("select_cover()<br/><small>src/affine_region_extractor.py</small>")
+    end
+    subgraph affine_src_full_state_analysis_py_db174342["src/full_state_analysis.py"]
+        src_full_state_analysis_certify_k_794e74c6("certify_k()<br/><small>src/full_state_analysis.py</small>")
+        src_full_state_analysis_boolean_solver_17b351eb("boolean_solver()<br/><small>src/full_state_analysis.py</small>")
+        src_full_state_analysis_earliest_cycle_start_b858987b("earliest_cycle_start()<br/><small>src/full_state_analysis.py</small>")
+        src_full_state_analysis_direct_sg_pn_96f467c0("direct_sg_pn()<br/><small>src/full_state_analysis.py</small>")
+    end
+    src_affine_region_extractor_segment_4855638f -->|method| src_affine_region_extractor_segment_cells_135b295f
+    src_affine_region_extractor_segment_4855638f -->|method| src_affine_region_extractor_segment_slope_label_14e4f3cf
+    src_affine_region_extractor_segment_4855638f -->|method| src_affine_region_extractor_segment_formula_58d92c58
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_full_state_analysis_boolean_solver_17b351eb
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_full_state_analysis_earliest_cycle_start_b858987b
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_affine_region_extractor_verify_periodic_ce2c7356
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_full_state_analysis_direct_sg_pn_96f467c0
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_affine_region_extractor_make_cells_55ed1eda
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_affine_region_extractor_components_2903ece8
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_affine_region_extractor_maximal_segments_167909de
+    src_affine_region_extractor_analyze_0b5d31d4 -->|calls| src_affine_region_extractor_select_cover_c4ba00f4
+    src_affine_region_extractor_main_fa0dbfb9 -->|calls| src_affine_region_extractor_selftest_f1497a8a
+    src_affine_region_extractor_main_fa0dbfb9 -->|calls| src_affine_region_extractor_analyze_0b5d31d4
+    src_affine_region_extractor_main_fa0dbfb9 -->|calls| src_affine_region_extractor_write_results_1d89c1d0
+    src_affine_region_extractor_maximal_segments_167909de -->|calls| src_affine_region_extractor_segment_4855638f
+    src_affine_region_extractor_selftest_f1497a8a -->|calls| src_full_state_analysis_boolean_solver_17b351eb
+    src_affine_region_extractor_selftest_f1497a8a -->|calls| src_full_state_analysis_direct_sg_pn_96f467c0
+    src_affine_region_extractor_selftest_f1497a8a -->|calls| src_affine_region_extractor_analyze_0b5d31d4
+    src_full_state_analysis_certify_k_794e74c6 -->|calls| src_full_state_analysis_boolean_solver_17b351eb
+    src_full_state_analysis_certify_k_794e74c6 -->|calls| src_full_state_analysis_earliest_cycle_start_b858987b
+    src_full_state_analysis_certify_k_794e74c6 -->|calls| src_full_state_analysis_direct_sg_pn_96f467c0
+    src_affine_region_extractor_a2fe7201 -->|imports| src_full_state_analysis_boolean_solver_17b351eb
+    src_affine_region_extractor_a2fe7201 -->|imports| src_full_state_analysis_direct_sg_pn_96f467c0
+    src_affine_region_extractor_a2fe7201 -->|imports| src_full_state_analysis_earliest_cycle_start_b858987b
+    %% Omitted for readability: 33 nodes, 0 edges
+    class src_affine_region_extractor_a2fe7201 module;
+    class src_affine_region_extractor_analyze_0b5d31d4 function;
+    class src_affine_region_extractor_write_results_1d89c1d0 function;
+    class src_affine_region_extractor_selftest_f1497a8a function;
+    class src_affine_region_extractor_main_fa0dbfb9 function;
+    class src_affine_region_extractor_segment_4855638f klass;
+    class src_affine_region_extractor_segment_cells_135b295f function;
+    class src_affine_region_extractor_segment_slope_label_14e4f3cf function;
+    class src_affine_region_extractor_segment_formula_58d92c58 function;
+    class src_affine_region_extractor_verify_periodic_ce2c7356 function;
+    class src_affine_region_extractor_make_cells_55ed1eda function;
+    class src_affine_region_extractor_components_2903ece8 ui;
+    class src_affine_region_extractor_maximal_segments_167909de function;
+    class src_affine_region_extractor_select_cover_c4ba00f4 function;
+    class src_full_state_analysis_certify_k_794e74c6 function;
+    class src_full_state_analysis_boolean_solver_17b351eb function;
+    class src_full_state_analysis_earliest_cycle_start_b858987b function;
+    class src_full_state_analysis_direct_sg_pn_96f467c0 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>Segment</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td><code>maximal_segments()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>cells()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>slope_label()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>Segment node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>affine_formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>find_tracks()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>selftest()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>affine_formula() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>selftest()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>components()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+5 more</td>
+  <td>Orchestrates analysis and returns structured documentation data.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>components()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>components() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>eval_affine()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>validate_track_union()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>re</code></td>
+  <td>eval_affine() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>find_tracks()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>affine_formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>fmt_affine()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>find_tracks() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>fmt_affine()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>find_tracks()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>fmt_affine() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>argparse</code><br><code>selftest()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br>+1 more</td>
+  <td>main() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>make_cells()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>make_cells() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>maximal_segments()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>Segment</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>maximal_segments() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>save_csv()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>csv</code></td>
+  <td>save_csv() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>seg_record()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>seg_record() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>.cells()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>Segment</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>.cells() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>.formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>Segment</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>.formula() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>.slope_label()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>Segment</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>.slope_label() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>select_cover()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>select_cover() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>selftest()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>affine_formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+1 more</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>test_boundary_formula()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>validate_track_union()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>eval_affine()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>validate_track_union() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>verify_periodic()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>verify_periodic() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><code>find_tracks()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>save_csv()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>seg_record()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br>+3 more</td>
+  <td>write_results() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>write_summary()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_results()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>write_summary() node in src/affine_region_extractor.py.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>certify_k()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+5 more</td>
+  <td>No direct outbound edge</td>
+  <td>boolean_solver() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>certify_k()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>write_certificates()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>earliest_cycle_start()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br>+1 more</td>
+  <td>certify_k() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>direct_sg_pn()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>certify()</code><br><small style="color:var(--muted)">methodology/theorem_B/verify_theorems_ab.py</small><br>+6 more</td>
+  <td>No direct outbound edge</td>
+  <td>direct_sg_pn() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>earliest_cycle_start()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>analyze()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>certify_k()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>earliest_cycle_start() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>plot_full_state()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>write_certificates()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td>main() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>plot_full_state()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><code>boolean_solver()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td>plot_full_state() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>verify_start_formula()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>certify_k()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>verify_start_formula() node in src/full_state_analysis.py.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>write_certificates()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small></td>
+  <td><code>certify_k()</code><br><small style="color:var(--muted)">src/full_state_analysis.py</small><br><code>csv</code></td>
+  <td>write_certificates() node in src/full_state_analysis.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>src/affine_region_extractor.py</code></td><td>32 nodes</td></tr>
+<tr><td><code>src/full_state_analysis.py</code></td><td>13 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls x34, contains x27, explains x13, imports x6. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 6. Research probes and manuscript sync ====== -->
+<h2 id="probes">6. Research probes and manuscript sync</h2>
+<p>Research probes and manuscript sync groups implementation around probepy, notes, compact, lean, mostly in notes/compact_probe.py, notes/lean_probe.py, src/sync_manuscripts.py. This section covers 21 nodes and 39 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Research probes and manuscript sync (21 nodes, 39 edges)
+    subgraph probes_notes_compact_probe_py_99138567["notes/compact_probe.py"]
+        notes_compact_probe_d12812c2("compact_probe.py")
+        notes_compact_probe_main_6d795109("main()<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_check_lower_98075da2("check_lower()<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_check_upper_10c2aed7("check_upper()<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_targets_e9ccbb75("targets()<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_solve_1647c43f("solve()<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_rationale_2_78856f1c("Memory-lean endpoint probe for the m=1...<br/><small>notes/compact_probe.py</small>")
+        notes_compact_probe_rationale_33_4a2feccc("Return (rows, starts) using the compact...<br/><small>notes/compact_probe.py</small>")
+    end
+    subgraph probes_notes_lean_probe_py_8ddcbeb5["notes/lean_probe.py"]
+        notes_lean_probe_d1dc5b17("lean_probe.py")
+        notes_lean_probe_main_f2f2878e("main()<br/><small>notes/lean_probe.py</small>")
+        notes_lean_probe_check_upper_4515cc1c("check_upper()<br/><small>notes/lean_probe.py</small>")
+        notes_lean_probe_check_upper_failure_6d1b79bc("check_upper_failure()<br/><small>notes/lean_probe.py</small>")
+    end
+    subgraph probes_External_generated_dc05bc6c["External / generated"]
+        time_714eea0f("time")
+        argparse_e750ee7c("argparse")
+        array_19edc121("array")
+    end
+    subgraph probes_src_sync_manuscripts_py_eb9c6e39["src/sync_manuscripts.py"]
+        src_sync_manuscripts_expand_36749b41("expand()<br/><small>src/sync_manuscripts.py</small>")
+        src_sync_manuscripts_main_ec67c7e8("main()<br/><small>src/sync_manuscripts.py</small>")
+        src_sync_manuscripts_850e64ba("sync_manuscripts.py")
+    end
+    notes_compact_probe_check_lower_98075da2 -->|calls| notes_compact_probe_targets_e9ccbb75
+    notes_compact_probe_check_lower_98075da2 -->|calls| time_714eea0f
+    notes_compact_probe_check_lower_98075da2 -->|calls| notes_compact_probe_solve_1647c43f
+    notes_compact_probe_check_upper_10c2aed7 -->|calls| time_714eea0f
+    notes_compact_probe_check_upper_10c2aed7 -->|calls| notes_compact_probe_solve_1647c43f
+    notes_compact_probe_check_upper_10c2aed7 -->|calls| notes_compact_probe_targets_e9ccbb75
+    notes_compact_probe_main_6d795109 -->|calls| argparse_e750ee7c
+    notes_compact_probe_main_6d795109 -->|calls| notes_compact_probe_check_lower_98075da2
+    notes_compact_probe_main_6d795109 -->|calls| notes_compact_probe_check_upper_10c2aed7
+    notes_lean_probe_check_upper_4515cc1c -->|calls| time_714eea0f
+    notes_lean_probe_check_upper_failure_6d1b79bc -->|calls| time_714eea0f
+    notes_lean_probe_main_f2f2878e -->|calls| argparse_e750ee7c
+    notes_lean_probe_main_f2f2878e -->|calls| notes_lean_probe_check_upper_4515cc1c
+    notes_lean_probe_main_f2f2878e -->|calls| notes_lean_probe_check_upper_failure_6d1b79bc
+    src_sync_manuscripts_expand_36749b41 -->|calls| src_sync_manuscripts_expand_36749b41
+    src_sync_manuscripts_main_ec67c7e8 -->|calls| argparse_e750ee7c
+    src_sync_manuscripts_main_ec67c7e8 -->|calls| src_sync_manuscripts_expand_36749b41
+    notes_compact_probe_d12812c2 -->|imports| argparse_e750ee7c
+    notes_compact_probe_d12812c2 -->|imports| time_714eea0f
+    notes_compact_probe_d12812c2 -->|imports| array_19edc121
+    notes_lean_probe_d1dc5b17 -->|imports| argparse_e750ee7c
+    notes_lean_probe_d1dc5b17 -->|imports| time_714eea0f
+    notes_lean_probe_d1dc5b17 -->|imports| array_19edc121
+    src_sync_manuscripts_850e64ba -->|imports| argparse_e750ee7c
+    %% Omitted for readability: 3 nodes, 0 edges
+    class notes_compact_probe_d12812c2 module;
+    class notes_compact_probe_main_6d795109 function;
+    class notes_compact_probe_check_lower_98075da2 function;
+    class notes_compact_probe_check_upper_10c2aed7 function;
+    class notes_compact_probe_targets_e9ccbb75 function;
+    class notes_compact_probe_solve_1647c43f function;
+    class notes_compact_probe_rationale_2_78856f1c concept;
+    class notes_compact_probe_rationale_33_4a2feccc concept;
+    class notes_lean_probe_d1dc5b17 module;
+    class notes_lean_probe_main_f2f2878e function;
+    class notes_lean_probe_check_upper_4515cc1c function;
+    class notes_lean_probe_check_upper_failure_6d1b79bc function;
+    class time_714eea0f function;
+    class argparse_e750ee7c function;
+    class array_19edc121 function;
+    class src_sync_manuscripts_expand_36749b41 function;
+    class src_sync_manuscripts_main_ec67c7e8 function;
+    class src_sync_manuscripts_850e64ba module;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><code>find_window()</code><br><small style="color:var(--muted)">src/verify_hierarchy.py</small><br><code>solve()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>targets()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br>+1 more</td>
+  <td>check_lower() node in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>check_upper()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><code>solve()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>targets()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>time</code></td>
+  <td>check_upper() node in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td>main() node in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>solve()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>solve() node in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>targets()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>targets() node in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>check_upper()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><code>time</code></td>
+  <td>check_upper() node in notes/lean_probe.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>check_upper_failure()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><code>time</code></td>
+  <td>check_upper_failure() node in notes/lean_probe.py.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small><br><code>check_upper_failure()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td>main() node in notes/lean_probe.py.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>expand()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>expand()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td><code>expand()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td>expand() node in src/sync_manuscripts.py.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>expand()</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td>main() node in src/sync_manuscripts.py.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>compact_probe.py</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>array</code><br><code>pathlib</code><br>+3 more</td>
+  <td>Module file in notes/compact_probe.py.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>lean_probe.py</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>array</code><br><code>time</code></td>
+  <td>Module file in notes/lean_probe.py.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>sync_manuscripts.py</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>argparse</code><br><code>pathlib</code><br><code>re</code></td>
+  <td>Module file in src/sync_manuscripts.py.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>Memory-lean endpoint probe for the m=1 regime template. The repository&#x27;s…</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Memory-lean endpoint probe for the m=1 regime template. The repository&#x27;s….</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>Return (rows, starts) using the compact m=1 row encoding.</code><br><small style="color:var(--muted)">notes/compact_probe.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Return (rows, starts) using the compact m=1 row encoding..</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>Find the first template mismatch for a parameter just above K_j.</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Find the first template mismatch for a parameter just above K_j..</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>Streaming upper-endpoint probe for the m=1 regime template. compact_probe.py…</code><br><small style="color:var(--muted)">notes/lean_probe.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Streaming upper-endpoint probe for the m=1 regime template. compact_probe.py….</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>Generate standalone Overleaf main/C sources from canonical modular sources.</code><br><small style="color:var(--muted)">src/sync_manuscripts.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Generate standalone Overleaf main/C sources from canonical modular sources..</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>argparse</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>build_parser()</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>compact_probe.py</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br>+16 more</td>
+  <td>No direct outbound edge</td>
+  <td>argparse node in project.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>array</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>compact_probe.py</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>distance_subtraction_research.py</code><br><small style="color:var(--muted)">src/distance_subtraction_research.py</small><br><code>large_scale_checks.py</code><br><small style="color:var(--muted)">src/large_scale_checks.py</small><br>+1 more</td>
+  <td>No direct outbound edge</td>
+  <td>array node in project.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>time</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>check_lower()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/compact_probe.py</small><br><code>check_upper()</code><br><small style="color:var(--muted)">notes/lean_probe.py</small><br>+6 more</td>
+  <td>No direct outbound edge</td>
+  <td>time node in project.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>notes/compact_probe.py</code></td><td>8 nodes</td></tr>
+<tr><td><code>notes/lean_probe.py</code></td><td>6 nodes</td></tr>
+<tr><td><code>src/sync_manuscripts.py</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls x17, contains x10, imports x5, explains x5. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 7. Tests and independent audits ====== -->
+<h2 id="tests">7. Tests and independent audits</h2>
+<p>Tests and independent audits groups implementation around test, verification, safetypy, tests, mostly in tests/test_verification_safety.py, src/verify_package.py, audits/2026-10-12/audit_checks.py. This section covers 22 nodes and 32 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Tests and independent audits (22 nodes, 32 edges)
+    subgraph tests_External_generated_b29a7103["External / generated"]
+        tempfile_30fe567d("tempfile")
+        subprocess_d2d1e1c0("subprocess")
+        pathlib_4471f74a("pathlib")
+        re_c387c982("re")
+        shutil_74870859("shutil")
+        algorithm_9a53b081("algorithm")
+        cstdlib_db11dc6f("cstdlib")
+        fstream_51608991("fstream")
+        os_999a3419("os")
+    end
+    subgraph tests_tests_test_verification_safety_py_ba8a04fc["tests/test_verification_safety.py"]
+        tests_test_verification_safety_be9eee53("test_verification_safety.py")
+        tests_test_verification_safety_verificationsafet_28fb5fbb("VerificationSafetyTests<br/><small>tests/test_verification_safety.py</small>")
+        tests_test_verification_safety_verificationsafet_e628dce3("test_optimized_scripts_and_imports_reject_before_writing()<br/><small>tests/test_verification_safety.py</small>")
+        tests_test_verification_safety_verificationsafet_22412f3b("test_sync_check_detects_drift_even_when_optimized()<br/><small>tests/test_verification_safety.py</small>")
+    end
+    subgraph tests_audits_2026_10_12_audit_checks_py_fa2e08bc["audits/2026-10-12/audit_checks.py"]
+        audits_2026_10_12_audit_checks_19b3d078("audit_checks.py")
+        audits_2026_10_12_audit_checks_independent_1cd9720f("independent()<br/><small>audits/2026-10-12/audit_checks.py</small>")
+    end
+    subgraph tests_src_verify_package_py_e4b89d1c["src/verify_package.py"]
+        src_verify_package_c05c52e7("verify_package.py")
+        src_verify_package_main_7aef7f02("main()<br/><small>src/verify_package.py</small>")
+    end
+    audits_2026_10_12_independent_pn_a5689a15("independent_pn.cpp")
+    tests_test_verification_safety_verificationsafet_28fb5fbb -->|method| tests_test_verification_safety_verificationsafet_e628dce3
+    tests_test_verification_safety_verificationsafet_28fb5fbb -->|method| tests_test_verification_safety_verificationsafet_22412f3b
+    audits_2026_10_12_audit_checks_independent_1cd9720f -->|calls| tempfile_30fe567d
+    audits_2026_10_12_audit_checks_independent_1cd9720f -->|calls| subprocess_d2d1e1c0
+    audits_2026_10_12_audit_checks_independent_1cd9720f -->|calls| pathlib_4471f74a
+    src_verify_package_main_7aef7f02 -->|calls| re_c387c982
+    src_verify_package_main_7aef7f02 -->|calls| tempfile_30fe567d
+    src_verify_package_main_7aef7f02 -->|calls| shutil_74870859
+    src_verify_package_main_7aef7f02 -->|calls| subprocess_d2d1e1c0
+    audits_2026_10_12_independent_pn_a5689a15 -->|imports| algorithm_9a53b081
+    audits_2026_10_12_independent_pn_a5689a15 -->|imports| cstdlib_db11dc6f
+    audits_2026_10_12_independent_pn_a5689a15 -->|imports| fstream_51608991
+    audits_2026_10_12_audit_checks_19b3d078 -->|imports| pathlib_4471f74a
+    audits_2026_10_12_audit_checks_19b3d078 -->|imports| subprocess_d2d1e1c0
+    audits_2026_10_12_audit_checks_19b3d078 -->|imports| tempfile_30fe567d
+    src_verify_package_c05c52e7 -->|imports| tempfile_30fe567d
+    src_verify_package_c05c52e7 -->|imports| re_c387c982
+    src_verify_package_c05c52e7 -->|imports| shutil_74870859
+    src_verify_package_c05c52e7 -->|imports| subprocess_d2d1e1c0
+    src_verify_package_c05c52e7 -->|imports| pathlib_4471f74a
+    tests_test_verification_safety_be9eee53 -->|imports| os_999a3419
+    tests_test_verification_safety_be9eee53 -->|imports| shutil_74870859
+    tests_test_verification_safety_be9eee53 -->|imports| subprocess_d2d1e1c0
+    tests_test_verification_safety_be9eee53 -->|imports| tempfile_30fe567d
+    %% Omitted for readability: 4 nodes, 1 edges
+    class tempfile_30fe567d function;
+    class subprocess_d2d1e1c0 function;
+    class pathlib_4471f74a function;
+    class re_c387c982 function;
+    class shutil_74870859 function;
+    class algorithm_9a53b081 function;
+    class cstdlib_db11dc6f function;
+    class fstream_51608991 async;
+    class os_999a3419 function;
+    class tests_test_verification_safety_be9eee53 test;
+    class tests_test_verification_safety_verificationsafet_28fb5fbb test;
+    class tests_test_verification_safety_verificationsafet_e628dce3 test;
+    class tests_test_verification_safety_verificationsafet_22412f3b test;
+    class audits_2026_10_12_audit_checks_19b3d078 module;
+    class audits_2026_10_12_audit_checks_independent_1cd9720f function;
+    class src_verify_package_c05c52e7 module;
+    class src_verify_package_main_7aef7f02 function;
+    class audits_2026_10_12_independent_pn_a5689a15 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>VerificationSafetyTests</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>test_optimized_scripts_and_imports_reject_before_writing()</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small><br><code>test_sync_check_detects_drift_even_when_optimized()</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>independent()</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>pathlib</code><br><code>subprocess</code><br><code>tempfile</code></td>
+  <td>independent() node in audits/2026-10-12/audit_checks.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_package.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>csv</code><br><code>json</code><br><code>re</code><br>+3 more</td>
+  <td>main() node in src/verify_package.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>.test_optimized_scripts_and_imports_reject_before_writing()</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>VerificationSafetyTests</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>.test_sync_check_detects_drift_even_when_optimized()</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td><code>VerificationSafetyTests</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>audit_checks.py</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>csv</code><br><code>hashlib</code><br><code>json</code><br>+5 more</td>
+  <td>Module file in audits/2026-10-12/audit_checks.py.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>verify_package.py</code><br><small style="color:var(--muted)">src/verify_package.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>csv</code><br><code>json</code><br><code>pathlib</code><br>+5 more</td>
+  <td>Module file in src/verify_package.py.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>test_verification_safety.py</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td><span class="tag tag-func">Test</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>os</code><br><code>pathlib</code><br><code>shutil</code><br>+4 more</td>
+  <td>Module file in tests/test_verification_safety.py.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>Verify research evidence in a temporary copy without changing published files.</code><br><small style="color:var(--muted)">src/verify_package.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Verify research evidence in a temporary copy without changing published files..</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>Regression checks for verification modes that could otherwise report false PASS.</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Design note for Regression checks for verification modes that could otherwise report false PASS..</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>os</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>test_verification_safety.py</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>os node in project.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>pathlib</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>audit_checks.py</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>check_j13_evidence.py</code><br><small style="color:var(--muted)">src/check_j13_evidence.py</small><br>+16 more</td>
+  <td>No direct outbound edge</td>
+  <td>pathlib node in project.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>re</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>affine_region_extractor.py</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>eval_affine()</code><br><small style="color:var(--muted)">src/affine_region_extractor.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/verify_package.py</small><br>+2 more</td>
+  <td>No direct outbound edge</td>
+  <td>re node in project.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>shutil</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>main()</code><br><small style="color:var(--muted)">src/verify_package.py</small><br><code>test_verification_safety.py</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small><br><code>verify_package.py</code><br><small style="color:var(--muted)">src/verify_package.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>shutil node in project.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>subprocess</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>audit_checks.py</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>independent()</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/verify_package.py</small><br>+2 more</td>
+  <td>No direct outbound edge</td>
+  <td>subprocess node in project.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>tempfile</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>audit_checks.py</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>independent()</code><br><small style="color:var(--muted)">audits/2026-10-12/audit_checks.py</small><br><code>main()</code><br><small style="color:var(--muted)">src/verify_package.py</small><br>+2 more</td>
+  <td>No direct outbound edge</td>
+  <td>tempfile node in project.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>unittest</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>test_verification_safety.py</code><br><small style="color:var(--muted)">tests/test_verification_safety.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>Verifies imports, entry points, or version behavior.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">audits/2026-10-12/independent_pn.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>main() node in audits/2026-10-12/independent_pn.cpp.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>independent_pn.cpp</code><br><small style="color:var(--muted)">audits/2026-10-12/independent_pn.cpp</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>algorithm</code><br><code>cstdlib</code><br><code>fstream</code><br>+1 more</td>
+  <td>independent_pn.cpp node in audits/2026-10-12/independent_pn.cpp.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>algorithm</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>distance subtraction research.cpp</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small><br><code>independent_pn.cpp</code><br><small style="color:var(--muted)">audits/2026-10-12/independent_pn.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>algorithm node in project.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>cstdlib</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>independent_pn.cpp</code><br><small style="color:var(--muted)">audits/2026-10-12/independent_pn.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>cstdlib node in project.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>fstream</code><br><small style="color:var(--muted)"></small></td>
+  <td><span class="tag tag-async">Async</span></td>
+  <td><code>distance subtraction research.cpp</code><br><small style="color:var(--muted)">src/distance_subtraction_research.cpp</small><br><code>independent_pn.cpp</code><br><small style="color:var(--muted)">audits/2026-10-12/independent_pn.cpp</small></td>
+  <td>No direct outbound edge</td>
+  <td>fstream node in project.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>tests/test_verification_safety.py</code></td><td>5 nodes</td></tr>
+<tr><td><code>src/verify_package.py</code></td><td>3 nodes</td></tr>
+<tr><td><code>audits/2026-10-12/audit_checks.py</code></td><td>2 nodes</td></tr>
+<tr><td><code>audits/2026-10-12/independent_pn.cpp</code></td><td>2 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: imports x15, calls x7, contains x4, method x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<h2 id="stats">Project Statistics</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Graph</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>Nodes</td><td>296</td></tr>
+      <tr><td>Edges</td><td>656</td></tr>
+      <tr><td>Hyperedges</td><td>0</td></tr>
+      <tr><td>Communities</td><td>15</td></tr>
+      <tr><td>Documented Sections</td><td>6</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Edge Confidence</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>EXTRACTED</td><td>638</td></tr>
+      <tr><td>INFERRED</td><td>18</td></tr>
+      <tr><td>AMBIGUOUS</td><td>0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0; color: var(--muted); font-size:0.9rem;">
+  <p>distance-constrained-subtraction-games — Architecture Documentation</p>
+  <p>Generated: 2026-11-08 18:27 UTC · graphify callflow-html</p>
+</div>
+
+</div><!-- .container -->
+
+<script>
+(function () {
+  const mermaidConfig = {
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#38bdf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#334155',
+      lineColor: '#64748b',
+      textColor: '#e2e8f0',
+    }
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function enhanceMermaidDiagrams() {
+    document.querySelectorAll('.mermaid').forEach((container) => {
+      if (container.dataset.zoomReady === 'true') return;
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      container.dataset.zoomReady = 'true';
+      container.classList.add('is-enhanced');
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+      svg.parentNode.insertBefore(viewport, svg);
+      viewport.appendChild(svg);
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = [
+        '<button type="button" data-action="zoom-out" title="Zoom out">-</button>',
+        '<span class="zoom-level" data-role="level">100%</span>',
+        '<button type="button" data-action="zoom-in" title="Zoom in">+</button>',
+        '<button type="button" data-action="fit" title="Fit width">Fit</button>',
+        '<button type="button" data-action="reset" title="Reset view">Reset</button>'
+      ].join('');
+      container.insertBefore(toolbar, viewport);
+
+      const state = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
+      const level = toolbar.querySelector('[data-role="level"]');
+
+      function applyTransform() {
+        svg.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        level.textContent = `${Math.round(state.scale * 100)}%`;
+      }
+
+      function zoomBy(delta) {
+        state.scale = clamp(state.scale + delta, 0.25, 3);
+        applyTransform();
+      }
+
+      function reset() {
+        state.scale = 1;
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      function fitWidth() {
+        const rawWidth = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+          ? svg.viewBox.baseVal.width
+          : svg.getBoundingClientRect().width / state.scale;
+        if (!rawWidth) {
+          reset();
+          return;
+        }
+        state.scale = clamp((viewport.clientWidth - 48) / rawWidth, 0.25, 1.4);
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'zoom-in') zoomBy(0.15);
+        if (action === 'zoom-out') zoomBy(-0.15);
+        if (action === 'fit') fitWidth();
+        if (action === 'reset') reset();
+      });
+
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.1 : -0.1);
+      }, { passive: false });
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        state.dragging = true;
+        state.startX = event.clientX;
+        state.startY = event.clientY;
+        state.originX = state.x;
+        state.originY = state.y;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (event) => {
+        if (!state.dragging) return;
+        state.x = state.originX + event.clientX - state.startX;
+        state.y = state.originY + event.clientY - state.startY;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!state.dragging) return;
+        state.dragging = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      applyTransform();
+    });
+  }
+
+  function renderMermaid() {
+    const result = mermaid.run
+      ? mermaid.run({ querySelector: '.mermaid' })
+      : Promise.resolve();
+    Promise.resolve(result)
+      .then(enhanceMermaidDiagrams)
+      .catch((error) => {
+        console.error('Mermaid render failed:', error);
+        enhanceMermaidDiagrams();
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+})();
+</script>
+
+</body>
+</html>

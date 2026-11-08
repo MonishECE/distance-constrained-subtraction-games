@@ -1,0 +1,32 @@
+[
+  {
+    "id": "solvers",
+    "name": "Python solvers and scans",
+    "communities": [2, 3, 13]
+  },
+  {
+    "id": "cpp",
+    "name": "C++ reference implementation",
+    "communities": [4, 6, 8, 9, 10, 11, 12]
+  },
+  {
+    "id": "certification",
+    "name": "Theorem certification",
+    "communities": [1]
+  },
+  {
+    "id": "affine",
+    "name": "Affine-region extraction",
+    "communities": [0]
+  },
+  {
+    "id": "probes",
+    "name": "Research probes and manuscript sync",
+    "communities": [5]
+  },
+  {
+    "id": "tests",
+    "name": "Tests and independent audits",
+    "communities": [7, 14]
+  }
+]
